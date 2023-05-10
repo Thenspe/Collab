@@ -16,18 +16,20 @@
 import re       # regular expressions for string manipulation
 
 # create a function for the unit conversion of feet to meters
-def ft2m (matchobj):
-    return matchobj.group(1) + str(float(matchobj.group(2))*0.3048)+" m"
-
+def primary(waterField):
+    def stephen_format(matchobj):
+        val = float(matchobj.group(2))
+        if matchobj.group(3) == "ft": 
+            val=float(matchobj.group(2))*0.3048 
+        
+        return str(val) + " m" 
+    waterfield = re.sub('(\w+;\s*)(\d+)\s*(ft|m)', stephen_format, example_data)
+    return waterfield
 
 # example_data = ""
 # example_data = "Fresh; 20 ft|"
 example_data = "Fresh; 20 ft|Fresh; 115 ft|"
-conversion = (re.sub('(\w+;\s*)(\d+)(\s*ft)', ft2m, example_data)) # explanation below
-outputVariable = re.split('(\w+;\s*)(\d+)(\s*ft)',conversion)
-print("Result: ")
-print (outputVariable[1] + ';')
-print()
+print (re.sub('(\w+;\s*)(\d+)\s*(ft|m)', stephen_format, example_data))
 
 # 1st Capturing Group (\w+;\s*)
 # \w

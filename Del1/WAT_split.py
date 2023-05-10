@@ -14,7 +14,7 @@
 # example_data = ""
 # example_data = ";1.52 m|;2.57 m|"
 # example_data = "Fresh; 20 ft|"
-# example_data = "Fresh; 20 ft|Fresh; 115 ft|"
+example_data = "Fresh; 20 ft|Fresh; 115 ft|"
 # print (re.sub('(\w+;\s*)(\d+)\s*(ft|m)', stephen_format, example_data))
 
 import re       # regular expressions for string manipulation

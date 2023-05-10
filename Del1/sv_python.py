@@ -23,13 +23,13 @@ def primary(waterField):
             val=float(matchobj.group(2))*0.3048 
         
         return str(val) + " m" 
-    waterfield = re.sub('(\w+;\s*)(\d+)\s*(ft|m)', stephen_format, example_data)
-    return waterfield
+    waterField = re.sub('(\w+;\s*)(\d+)\s*(ft|m)', stephen_format, waterField)
+    return waterField
 
 # example_data = ""
 # example_data = "Fresh; 20 ft|"
-example_data = "Fresh; 20 ft|Fresh; 115 ft|"
-print (re.sub('(\w+;\s*)(\d+)\s*(ft|m)', stephen_format, example_data))
+# example_data = "Fresh; 20 ft|Fresh; 115 ft|"
+# print (re.sub('(\w+;\s*)(\d+)\s*(ft|m)', stephen_format, example_data))
 
 # 1st Capturing Group (\w+;\s*)
 # \w

@@ -12,6 +12,9 @@ tbl = r"Wells_Report_ExportTable"
 # arcpy.AddField_management(tbl, "GEO4", "TEXT")
 # arcpy.AddField_management(tbl, "GEO5", "TEXT")
 # arcpy.AddField_management(tbl, "GEO6", "TEXT")
+# arcpy.AddField_management(tbl, "GEO7", "TEXT")
+# arcpy.AddField_management(tbl, "GEO8", "TEXT")
+# arcpy.AddField_management(tbl, "GEO9", "TEXT")
 
 # Define the parameters for the UpdateCursor() function to iterate through the feature class 
 # to split the string value based on a delimiter and remove leading and trailing blank spaces in the new fields.

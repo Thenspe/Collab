@@ -35,11 +35,15 @@ def primary(waterField):
 def statWater(waterField):
     def ft2m(conv):
         val = float(conv.group(1))
-        if conv.group(2) == \"ft\": 
-            val=float(conv.group(2))*0.3048 
-        return str(val)
-    Waterfield = re.sub('(\\d+)(\\s*ft)',ft2m,waterField)
-    return waterField""")[0]
+        print(val)
+        if conv.group(2) == " ft": 
+            val=round((float(conv.group(1))*0.3048),1)
+            return str(val)
+        elif conv.group(2) == " m":
+            val = round(val,1)
+            return str(val)
+    converted = re.sub('([\d\.]+)(\s*\w+)',ft2m,waterField)
+    return converted""")[0]
 
 if __name__ == '__main__':
     # Global Environment settings

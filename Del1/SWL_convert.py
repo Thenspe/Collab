@@ -13,22 +13,25 @@
 # Put them back into WAT, delimited by semicolon.
 
 # example_data = ""
-example_data = "BRWN ;SAND ;CLAY ;FILL ;0 m;2.43 m|BRWN ;CLAY ;SILT ; DRY ;2.43 m;3.65 m|BRWN ;SAND ;STNS ;WBRG ;3.65 m;4.57 m|"
+example_data = "8"
 # example_data = "40 ft"
-# example_data = "6 m"
+# example_data = "6.79 m"
 
 #import arcpy    # arcpy, so we can turn it into a tool in ArcPro
 import re       # regular expressions for string manipulation
 
-def colour(waterField):
+def statWater(waterField):
     def ft2m(conv):
-        val = float(conv.group(5))
-        if conv.group(6) == " ft": 
-            val=float(conv.group(5))*0.3048 
-        return str(val)
-    converted = re.sub('(\s*\w*\s*;)(\s*\w*\s*;)(\s*\w*\s*;)(\s*\w*\s*;)([\d\.]+)\s*(ft|m);([\d\.]+)\s*(ft|m)',ft2m,waterField)
+        val = float(conv.group(1))
+        if conv.group(2) == " ft": 
+            val=round((float(conv.group(1))*0.3048),1)
+            return str(val)
+        elif conv.group(2) == " m":
+            val = round(val,1)
+            return str(val)
+    converted = re.sub('([\d\.]+)(\s*\w+)',ft2m,waterField)
     return converted
 
 # for testing only
-print(colour(example_data))
+print(statWater(example_data))
 print()

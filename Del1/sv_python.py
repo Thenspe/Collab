@@ -12,24 +12,35 @@
 
 # Put them back into WAT, delimited by semicolon.
 
+# example_data = ""
+# example_data = ";1.52 m|;2.57 m|"
+# example_data = "Fresh; 20 ft|"
+example_data = "Fresh; 20 ft|Fresh; 115 ft|"
+# print (re.sub('(\w+;\s*)(\d+)\s*(ft|m)', stephen_format, example_data))
+
 #import arcpy    # arcpy, so we can turn it into a tool in ArcPro
 import re       # regular expressions for string manipulation
 
 # create a function for the unit conversion of feet to meters
 def primary(waterField):
     def stephen_format(matchobj):
-        val = float(matchobj.group(2))
-        if matchobj.group(3) == "ft": 
-            val=float(matchobj.group(2))*0.3048 
+        val = float(matchobj[1])
+        if matchobj[2] == "ft": 
+            val=float(matchobj[1])*0.3048 
         
         return str(val) + " m" 
-    waterField = re.sub('(\w+;\s*)(\d+)\s*(ft|m)', stephen_format, waterField)
-    return waterField
+    waterField = re.findall('(\w*;\s*)([\d\.]+)\s*(ft|m)', waterField)
+    waterReturn = str()
+    for m in waterField:
+        stephen_format(m)
+        waterReturn += str(m[1]) + "; "
+        print(waterReturn)
+    return waterReturn
 
-# example_data = ""
-# example_data = "Fresh; 20 ft|"
-# example_data = "Fresh; 20 ft|Fresh; 115 ft|"
-# print (re.sub('(\w+;\s*)(\d+)\s*(ft|m)', stephen_format, example_data))
+primary(example_data)
+print()
+
+
 
 # 1st Capturing Group (\w+;\s*)
 # \w
@@ -49,3 +60,12 @@ def primary(waterField):
 # * matches the previous token between zero and unlimited times, as many times as possible, giving back as needed (greedy)
 # ft
 #  matches the characters ft literally (case sensitive)
+
+# def statWater(waterField):
+#     def ft2m(conv):
+#         val = float(conv.group(1))
+#         if conv.group(2) == "ft": 
+#             val=float(conv.group(2))*0.3048 
+#         return str(val)
+#     Waterfield = re.sub('(\d+)(\s*ft)',ft2m,waterField)
+#     return waterField

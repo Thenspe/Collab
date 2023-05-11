@@ -8,6 +8,15 @@ example_data = "BRWN ;SAND ;CLAY ;FILL ;0 m;2.43 m|BRWN ;CLAY ;SILT ; DRY ;2.43 
 
 import arcpy
 
+def ft2m(convertMe):
+    depthCheck = convertMe.split(" ")
+    print(depthCheck)
+    if depthCheck[0] == '':
+        print(depthCheck[0])
+    elif depthCheck[1] == "ft":
+        depthCheck[0] = float(depthCheck[0])*0.3048
+    return depthCheck[0]
+
 workspace="D:\\FlemSem3\\Collab\\CollabProj\\CollabProj.gdb"
 arcpy.env.workspace = workspace
 
@@ -47,7 +56,8 @@ for row in pull:                # for each row in the original table...
         # print(pull[0])
         # print(len(semicolons))
         if len(semicolons) > 1:     # only add lines that have values in them
-            addStuff.insertRow([pull[0],semicolons[0],semicolons[1],semicolons[2],semicolons[3],semicolons[4],semicolons[5]])
+            addStuff.insertRow([pull[0],semicolons[0],semicolons[1],semicolons[2],semicolons[3],ft2m(semicolons[4]),ft2m(semicolons[5])])
+
             # print(semicolons)
 del pull        # close the cursors to prevent errors
 del addStuff

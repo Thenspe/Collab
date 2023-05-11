@@ -24,12 +24,28 @@ example_data = "BRWN ;SAND ;CLAY ;FILL ;0 m;2.43 m|BRWN ;CLAY ;SILT ; DRY ;2.43 
 #         return str(val)
 
 #import arcpy    # arcpy, so we can turn it into a tool in ArcPro
-import re       # regular expressions for string manipulation
+import re
 
-def primary(waterField):
-    converted = re.findall('(\s*\w*\s*;)(\s*\w*\s*;)(\s*\w*\s*;)(\s*\w*\s*;)([\d\.]+)\s*(ft|m);([\d\.]+)\s*(ft|m)',waterField)
-    return converted
+def colour(geo):
+    pipes = geo.split("|")
+    semicolon = []
+    for x in pipes:
+        semicolon = x.split(";")
+        return semicolon[0]
+
+# def mat1(geo):
+#     data = re.findall('(\s*\w*\s*;)',geo)
+#     return data
+# def mat2(geo):
+#     data = re.findall('(\s*\w*\s*;)',geo)
+#     return data
+# def mat3(geo):
+#     data = re.findall('(\s*\w*\s*;)',geo)
+#     return data
 
 # for testing only
-print(primary(example_data))
+print(colour(example_data))
+# print(mat1(example_data))
+# print(mat2(example_data))
+# print(mat3(example_data))
 print()

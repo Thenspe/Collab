@@ -9,23 +9,20 @@ import arcpy
 workspace="D:\\FlemSem3\\Collab\\CollabProj\\CollabProj.gdb"
 arcpy.env.workspace = workspace
 
-table = 'Wells_Type'
-ptSearch = ['WELL_ID','PT','RPR','PUMPDUR']
-# ptUpdate = ['PT','RPR','PUMPDUR']
-# pumpData = arcpy.da.UpdateCursor(table,ptUpdate)
-# ptSplit = []
+table = 'Wells_Type' # table to update
+ptSearch = ['WELL_ID','PT','RPR','PUMPDUR'] #fields to reference and update
 
-with arcpy.da.UpdateCursor(table, ptSearch) as cursor:
+with arcpy.da.UpdateCursor(table, ptSearch) as cursor:  # create the update cursor
     for row in cursor:
         # print(row)
         # print(len(row[1]))
-        if len(row[1]) > 1:
-            ptSplit = row[1].split(';')
+        if len(row[1]) > 1:                 # if PT is not empty
+            ptSplit = row[1].split(';')     # split PT by semicolon
             # print(ptSplit[4] + '|' + ptSplit[6] + '|' + ptSplit[10])
             # print('Before: ',row)
-            row[1] = ptSplit[4]
-            row[2] = ptSplit[6]
-            row[3] = ptSplit[10]
+            row[1] = ptSplit[4]     # assign value from the 5th semicolon to PT
+            row[2] = ptSplit[6]     # assign value from the 5th semicolon to RPR
+            row[3] = ptSplit[10]    # assign value from the 5th semicolon to PUMPDUR
             # print('After ',row)
             # this is where you'd work the conversion process in
             cursor.updateRow(row)

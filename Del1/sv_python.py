@@ -9,7 +9,6 @@ On final output, all units are in meters unless otherwise specified.
 import arcpy
 import re
 
-
 def script_tool(param0):   # master function
 
     def addSomeFields(table,field,alias):
@@ -203,15 +202,15 @@ def primary(waterField):            # function required for ArcGIS Pro code bloc
 """)
 
     # Step 4 B - Static Water Level - Calculate Field
-    arcpy.management.CalculateField(in_table=tables[0], field="SWL", expression="primary(!SWL!)", code_block="""import re
+    arcpy.management.CalculateField(in_table=tables[0], field="SWL", expression="statWater(!SWL!)", code_block="""import re
 def statWater(waterField):
     def ft2m(conv):
         val = float(conv.group(1))
         if conv.group(2) == " ft": 
             val=round((float(conv.group(1))*0.3048),1)
-            return str(val)
+            return str(val)            
         elif conv.group(2) == " m":
-            val = round(val,1)
+            val = round(float(conv.group(1)),1)
             return str(val)
     converted = re.sub('([\d\.]+)(\s*\w+)',ft2m,waterField)
     return converted
@@ -227,8 +226,8 @@ def statWater(waterField):
                 ptSplit = row[1].split(';')     # split PT by semicolon
                 # print(ptSplit[4] + '|' + ptSplit[6] + '|' + ptSplit[10])
                 # print('Before: ',ptSplit)
-                ptConvert = re.sub('(\d*)\s*(\w+)',g2L,ptSplit[4]) # check for and make any necessary conversion
-                rprConvert = re.sub('(\d*)\s*(\w+)',g2L,ptSplit[6]) # check for and make any necessary conversion
+                ptConvert = re.sub('([\d\.]+)\s*(\w+)',g2L,ptSplit[4]) # check for and make any necessary conversion
+                rprConvert = re.sub('([\d\.]+)\s*(\w+)',g2L,ptSplit[6]) # check for and make any necessary conversion
 
                 row[1] = ptConvert    # assign value from the 5th semicolon to PT
                 row[2] = rprConvert     # assign value from the 5th semicolon to RPR

@@ -53,7 +53,9 @@ def script_tool(param0):   # master function
             val = conv.group(1)
             return val
         else:
-            raise Exception("PT Unit is in neither GPM nor LPM.")
+            raise Exception("PT Unit is in neither GPM nor LPM.",conv.group(1),conv.group(2),row)
+        
+        
     
     dataTable = param0 # 'Wells_In_Buffer'
     # Step 2 - Name and create the three tables
@@ -188,7 +190,7 @@ def script_tool(param0):   # master function
     arcpy.management.CalculateField(in_table=tables[0], field="WAT", expression="primary(!WAT!)", code_block="""import re
 def primary(waterField):            # function required for ArcGIS Pro code block
     def WATft2m(matchobj):   # function for unit conversion
-        val = float(matchobj[1])    # convers value from string to number
+        val = float(matchobj[1])    # converts value from string to number
         if matchobj[2] == "ft":     # checks for ft vs m
             val=round((float(matchobj[1])*0.3048),2)    # converts ft to m, rounds to 2 decimals
         return str(val) + " m"      # returns the number plus the new unit
@@ -201,15 +203,15 @@ def primary(waterField):            # function required for ArcGIS Pro code bloc
 """)
 
     # Step 4 B - Static Water Level - Calculate Field
-    arcpy.management.CalculateField(in_table=tables[0], field="SWL", expression="primary(!SWL!)", code_block="""import re
+    arcpy.management.CalculateField(in_table=tables[0], field="SWL", expression="statWater(!SWL!)", code_block="""import re
 def statWater(waterField):
     def ft2m(conv):
         val = float(conv.group(1))
         if conv.group(2) == " ft": 
             val=round((float(conv.group(1))*0.3048),1)
-            return str(val)
+            return str(val)            
         elif conv.group(2) == " m":
-            val = round(val,1)
+            val = round(float(conv.group(1)),1)
             return str(val)
     converted = re.sub('([\d\.]+)(\s*\w+)',ft2m,waterField)
     return converted
@@ -225,8 +227,8 @@ def statWater(waterField):
                 ptSplit = row[1].split(';')     # split PT by semicolon
                 # print(ptSplit[4] + '|' + ptSplit[6] + '|' + ptSplit[10])
                 # print('Before: ',ptSplit)
-                ptConvert = re.sub('(\d*)\s*(\w+)',g2L,ptSplit[4]) # check for and make any necessary conversion
-                rprConvert = re.sub('(\d*)\s*(\w+)',g2L,ptSplit[6]) # check for and make any necessary conversion
+                ptConvert = re.sub('([\d\.]+)\s*(\w+)',g2L,ptSplit[4]) # check for and make any necessary conversion
+                rprConvert = re.sub('([\d\.]+)\s*(\w+)',g2L,ptSplit[6]) # check for and make any necessary conversion
 
                 row[1] = ptConvert    # assign value from the 5th semicolon to PT
                 row[2] = rprConvert     # assign value from the 5th semicolon to RPR
@@ -238,6 +240,7 @@ def statWater(waterField):
 
 if __name__ == "__main__":
 
-    param0 = arcpy.GetParameter(0) # Wells_In_Buffer
+    # param0 = arcpy.GetParameter(0) # Wells_In_Buffer
+    param0 = 'Wells_Report_Intersect'
 
     script_tool(param0)

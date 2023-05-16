@@ -55,7 +55,7 @@ def script_tool(param0):   # master function
             val = conv.group(1)
             return val
         else:
-            raise Exception("PT Unit is in neither GPM nor LPM.")
+            raise Exception("PT Unit is in neither GPM nor LPM.",conv.group(1),conv.group(2))
     
     dataTable = param0 # 'Wells_In_Buffer'
     # Step 2 - Name and create the three tables

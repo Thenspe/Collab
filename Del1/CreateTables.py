@@ -8,6 +8,7 @@ arcpy.env.workspace = workspace
 arcpy.env.overwriteOutput = True
 
 def addSomeFields(table,field,alias):
+# This function iterates through adding fields to some tables
     x = 0
     while x < len(field):
         fieldLength = 20
@@ -19,19 +20,20 @@ def addSomeFields(table,field,alias):
         x+=1
 
 dataTable = 'Wells_In_Buffer'
+# Step 2 - Name and create the three tables
 tables = ['Wells_Type','Borehole_Results','Borehole_Details']
 t = 0
 while t < len(tables):
-    if arcpy.Exists(tables[t]):
+    if arcpy.Exists(tables[t]):         # check if the tables already exist. Delete them if they do.
         print("Table",tables[t],"exists, deleting . . .")
         arcpy.Delete_management(tables[t])
         print("Table",tables[t],"deleted.")
     print("Creating table",tables[t],". . .")
-    arcpy.management.CreateTable(workspace,tables[t])
+    arcpy.management.CreateTable(workspace,tables[t])   # Create new tables
     print("Table",tables[t],"created.")
     print()
 
-    tableFields = [
+    tableFields = [     # Set the field names for the tables
         #well_type
         ['WELL_ID','TAG','EAST83','NORTH83','UTMZONE','WELL_COMPLETED_DATE','RECEIVED_DATE','FINAL_STATUS_DESCR','USE1','USE2','DEPTH_M','WAT','SWL','PT','RPR','PUMPDUR'],
         # borehole_results
@@ -39,7 +41,7 @@ while t < len(tables):
         # borehole_details
         ['WELL_ID','HOLE_D','HOLE_T','HOLE_B','CAS_M','CAS_D','CAS_T','CAS_B','SCRN_D','SCRN_M','SCRN_T','SCRN_B']
     ]
-    tableAlias = [
+    tableAlias = [      # Set the alias for the tables
         # well_type
         ['Well ID','TAG','Easting','Northing','UTM Zone','Well Completion Date','Received Date','Final Status','Use 1','Use 2','Well Depth','Water First Found','Static Water Level','PT','Recommended Pump Rate','Pump Duration'],
         # borehole_results
@@ -48,9 +50,8 @@ while t < len(tables):
         ['Well ID','Hole Diameter','Hole Top','Hole Bottom','Casing Material','Casing Casing Diameter','Casing Top','Casing Bottom','Screen Diameter','Screen Material','Screen Top','Screen Bottom']
     ]
 
-    addSomeFields(tables[t],tableFields[t],tableAlias[t])
-    t+=1
+    addSomeFields(tables[t],tableFields[t],tableAlias[t])   # Run the add fields function
+    t+=1    # iterate
 
-
-print('Process complete.')
+print('Step 2 - Create Tables complete.')
 

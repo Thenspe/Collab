@@ -30,35 +30,15 @@ with arcpy.da.UpdateCursor(table, ptSearch) as cursor:  # create the update curs
         if len(row[1]) > 1:                 # if PT is not empty
             ptSplit = row[1].split(';')     # split PT by semicolon
             # print(ptSplit[4] + '|' + ptSplit[6] + '|' + ptSplit[10])
-            # print('Before: ',row)
-#            ptConvert = re.sub('(\d)(\w)',g2L,ptSplit[4]) # check for and make any necessary conversion
-#            rprConvert = re.sub('(\d)(\w)',g2L,ptSplit[6]) # check for and make any necessary conversion
-# conversion works, just need to check for empty list values
+            print('Before: ',row)
+            ptConvert = re.sub('(\d)(\w)',g2L,ptSplit[4]) # check for and make any necessary conversion
+            rprConvert = re.sub('(\d)(\w)',g2L,ptSplit[6]) # check for and make any necessary conversion
 
-            row[1] = ptSplit[4]     # assign value from the 5th semicolon to PT
-            row[2] = ptSplit[6]     # assign value from the 5th semicolon to RPR
+            row[1] = ptConvert     # assign value from the 5th semicolon to PT
+            row[2] = rprConvert     # assign value from the 5th semicolon to RPR
             row[3] = ptSplit[10]    # assign value from the 5th semicolon to PUMPDUR
             # print('After ',row)
             cursor.updateRow(row)
-
-
-
-# bufferedTable = 'Wells_In_Buffer'
-# typeTable = 'Well_Type'
-# # check if the table already exists, remove it if it does.
-# if arcpy.Exists(typeTable):
-#     print(typeTable + ' table exists, deleting...')
-#     arcpy.Delete_management(typeTable)
-#     print('Table deleted.')
-# print("Creating table.")
-
-# # create the table
-# arcpy.management.CreateTable(workspace,typeTable)
-# # set the fields for the new table
-# insertFields = ['WELL_ID','TAG','EAST83','NORTH83','UTMZONE','WELL_COMPLETED_DATE','RECEIVED_DATE','FINAL_STATUS_DESCR','USE1','USE2','DEPTH_M','WAT','SWL','PT']
-# # add fields to the table
-# for x in insertFields:
-#     arcpy.management.AddField(typeTable,x,'TEXT')
 
 
 print('Process complete.')

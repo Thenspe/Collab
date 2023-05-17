@@ -1,5 +1,9 @@
-# This script creates the Borehole_Results table
-# and splits the field GEO into it
+"""
+This script was created by Stephen VanDam for the Fleming College Collaborative Project 2306 in May of 2023. 
+
+It takes an input from the Ministry of the Environment Well Water Information System REST endpoint, after a buffer and
+intersect to reduce the number of wells, and outputs 3 tables, populated and with units converted from imperial to metric. 
+"""
 
 import arcpy
 import re
@@ -60,7 +64,7 @@ def script_tool(param0):   # master function
     
     dataTable = param0 # 'Wells_In_Buffer'
     tables = ['Wells_Type','Borehole_Results','Borehole_Details']
-    ############################################################################################################################
+    ####################################################################################
     # Step 2 - Name and create the three tables
     t = 0
     while t < len(tables):
@@ -95,7 +99,7 @@ def script_tool(param0):   # master function
 
     print('Step 2: Create Tables - COMPLETE.')
 
-############################################################################################################################
+####################################################################################
 
     # Step 3 - Populate the tables
 
@@ -183,7 +187,7 @@ def script_tool(param0):   # master function
         del inCursor # close the cursor
     print('Step 3: Populate tables - COMPLETE.')
     
-    ############################################################################################################################
+    ####################################################################################
     
     # Step 4 - Unit Conversions
 

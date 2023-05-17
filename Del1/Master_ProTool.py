@@ -6,6 +6,7 @@ This tool creates three tables for data output. It populates them from a given i
 It is assumed that GPM is Imperial Gallons per Minute, not US Gallons Per Minute.
 On final output, all units are in meters unless otherwise specified.
 """
+
 import arcpy
 import re
 
@@ -27,7 +28,7 @@ def script_tool(param0):   # master function
     # Step 3B, Step 4D - this functions converts units in ft to m AND from inches to cm
         if convertMe.group(2) == 'ft':
             val = round(float(convertMe.group(1))*0.3048,2) # converts feet to metres
-        elif convertMe.group(2) == 'inchw':
+        elif convertMe.group(2) == 'inch':
             val = round(float(convertMe.group(1))*2.54,2) # converts inches to centimetres
         else:
             val = convertMe.group(1)

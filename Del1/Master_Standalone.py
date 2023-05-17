@@ -30,7 +30,7 @@ def script_tool(param0):   # master function
     # Step 3B, Step 4D - this functions converts units in ft to m AND from inches to cm
         if convertMe.group(2) == 'ft':
             val = round(float(convertMe.group(1))*0.3048,2) # converts feet to metres
-        elif convertMe.group(2) == 'inchw':
+        elif convertMe.group(2) == 'inch':
             val = round(float(convertMe.group(1))*2.54,2) # converts inches to centimetres
         else:
             val = convertMe.group(1)

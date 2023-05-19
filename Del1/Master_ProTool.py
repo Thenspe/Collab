@@ -12,12 +12,33 @@ import re
 
 def script_tool(param0):   # master function
 
+    dataTable = param0 # 'Wells_In_Buffer'
+    tables = ['Wells_Type','Borehole_Results','Borehole_Details']
+    tableFields = [     # Set the field names for the tables
+            #well_type  1       2       3           4                5                  6                  7           8       9     10       11    12    13   14       15
+            ['WELL_ID','TAG','EAST83','NORTH83','UTMZONE','WELL_COMPLETED_DATE','RECEIVED_DATE','FINAL_STATUS_DESCR','USE1','USE2','DEPTH_M','WAT','SWL','PT','RPR','PUMPDUR'],
+            # borehole_results      3     4      5      6    7
+            ['WELL_ID','Colour','Mat1','Mat2','Mat3','Top','Bot'],
+            # borehole_details     3        4       5       6       7       8       9         10       11       12
+            ['WELL_ID','HOLE_D','HOLE_T','HOLE_B','CAS_M','CAS_D','CAS_T','CAS_B','SCRN_D','SCRN_M','SCRN_T','SCRN_B']
+        ]
+    tableAlias = [      # Set the alias for the tables
+            # well_type
+            ['Well ID','TAG','Easting','Northing','UTM Zone','Well Completion Date','Received Date','Final Status','Use 1','Use 2','Well Depth','Water First Found','Static Water Level','PT','Recommended Pump Rate','Pump Duration'],
+            # borehole_results
+            ['Well ID','Colour','Material 1','Material 2','Material 3','Upper limit','Lower limit'],
+            # borehole_details
+            ['Well ID','Hole Diameter (cm)','Hole Top','Hole Bottom','Casing Material','Casing Casing Diameter (cm)','Casing Top','Casing Bottom','Screen Diameter (cm)','Screen Material','Screen Top','Screen Bottom']
+        ]
+    stratigraphy = 'GEO'
+    MOE_Holes = ['HOLE','CAS','SCRN']
+
     def addSomeFields(table,field,alias):
     # Step 2 - This function iterates through adding fields to some tables
         x = 0
         while x < len(field):
             fieldLength = 20
-            if field[x] == 'FINAL_STATUS_DESCR' or field[x] == 'USE1' or field[x] == 'USE2' or field[x] == 'WAT' or field[x] == 'PT':
+            if field[x] == tableFields[0][7] or field[x] == tableFields[0][8] or field[x] == tableFields[0][9] or field[x] == tableFields[0][11] or field[x] == tableFields[0][13]:
                 fieldLength = 100
             else:
                 fieldLength = 20
@@ -58,11 +79,8 @@ def script_tool(param0):   # master function
         else:
             raise Exception("PT Unit is in neither GPM nor LPM.",conv.group(1),conv.group(2),row)
         
-        
-    
-    dataTable = param0 # 'Wells_In_Buffer'
-    tables = ['Wells_Type','Borehole_Results','Borehole_Details']
     ####################################################################################
+
     # Step 2 - Name and create the three tables
     t = 0
     while t < len(tables):
@@ -74,23 +92,6 @@ def script_tool(param0):   # master function
         arcpy.management.CreateTable(arcpy.env.workspace,tables[t])   # Create new tables
         print("Table",tables[t],"created.")
         print()
-
-        tableFields = [     # Set the field names for the tables
-            #well_type
-            ['WELL_ID','TAG','EAST83','NORTH83','UTMZONE','WELL_COMPLETED_DATE','RECEIVED_DATE','FINAL_STATUS_DESCR','USE1','USE2','DEPTH_M','WAT','SWL','PT','RPR','PUMPDUR'],
-            # borehole_results
-            ['WELL_ID','Colour','Mat1','Mat2','Mat3','Top','Bot'],
-            # borehole_details
-            ['WELL_ID','HOLE_D','HOLE_T','HOLE_B','CAS_M','CAS_D','CAS_T','CAS_B','SCRN_D','SCRN_M','SCRN_T','SCRN_B']
-        ]
-        tableAlias = [      # Set the alias for the tables
-            # well_type
-            ['Well ID','TAG','Easting','Northing','UTM Zone','Well Completion Date','Received Date','Final Status','Use 1','Use 2','Well Depth','Water First Found','Static Water Level','PT','Recommended Pump Rate','Pump Duration'],
-            # borehole_results
-            ['Well ID','Colour','Material 1','Material 2','Material 3','Upper limit','Lower limit'],
-            # borehole_details
-            ['Well ID','Hole Diameter (cm)','Hole Top','Hole Bottom','Casing Material','Casing Casing Diameter (cm)','Casing Top','Casing Bottom','Screen Diameter (cm)','Screen Material','Screen Top','Screen Bottom']
-        ]
 
         addSomeFields(tables[t],tableFields[t],tableAlias[t])   # Run the add fields function
         t+=1    # iterate
@@ -104,9 +105,8 @@ def script_tool(param0):   # master function
     # - # - # - # - # - # - # - # - #
 
     # Step 3 A - tables[0] Wells_Type
-
-    searchFields = ['WELL_ID','TAG','EAST83','NORTH83','UTMZONE','WELL_COMPLETED_DATE','RECEIVED_DATE','FINAL_STATUS_DESCR','USE1','USE2','DEPTH_M','WAT','SWL','PT']
-    insertFields = ['WELL_ID','TAG','EAST83','NORTH83','UTMZONE','WELL_COMPLETED_DATE','RECEIVED_DATE','FINAL_STATUS_DESCR','USE1','USE2','DEPTH_M','WAT','SWL','PT','RPR','PUMPDUR']
+    searchFields = [tableFields[0][:-2]]
+    insertFields = [tableFields[0]]
     addStuff = arcpy.da.InsertCursor(tables[0],insertFields)
 
     with arcpy.da.SearchCursor(dataTable,searchFields) as cursor:
@@ -121,10 +121,10 @@ def script_tool(param0):   # master function
     # - # - # - # - # - # - # - # - #
 
     # Step 3 B - tables[1] Borehole_Results
-    insertFields = ['Well_ID','Colour','Mat1','Mat2','Mat3','Top','Bot']
+    insertFields = [tableFields[1]]
 
     # set the relevant fields from the table with the data
-    searchFields = ['Well_ID','GEO']
+    searchFields = [tableFields[0][0],stratigraphy]
     # create the insert cursor, for populating the new table
     addStuff = arcpy.da.InsertCursor(tables[1], insertFields)
     # create the search cursor, for pulling data from the original table
@@ -149,8 +149,8 @@ def script_tool(param0):   # master function
 
     # Step 3 C - tables[2] Borehole Details
 
-    searchFor = ['WELL_ID','HOLE','CAS','SCRN'] # fields to pull from
-    putItHere = ['WELL_ID','HOLE_D','HOLE_T','HOLE_B','CAS_M','CAS_D','CAS_T','CAS_B','SCRN_D','SCRN_M','SCRN_T','SCRN_B']   # fields to place data into
+    searchFor = [tableFields[0][0],MOE_Holes[0],MOE_Holes[1],MOE_Holes[2]] # fields to pull from
+    putItHere = [tableFields[2]]   # fields to place data into
     inCursor = arcpy.da.InsertCursor(tables[2],putItHere)             # prep the insert cursor
 
     with arcpy.da.SearchCursor(dataTable,searchFor) as cursor:    # create the search cursor to pull data
@@ -191,7 +191,7 @@ def script_tool(param0):   # master function
 
     # Step 4 A - WAT - Calculate Field
 
-    arcpy.management.CalculateField(in_table=tables[0], field="WAT", expression="primary(!WAT!)", code_block="""import re
+    arcpy.management.CalculateField(in_table=tables[0], field=tableFields[0][11], expression=("primary(!"+tableFields[0][11]+"!)"), code_block="""import re
 def primary(waterField):            # function required for ArcGIS Pro code block
     def WATft2m(matchobj):          # function for unit conversion
         val = float(matchobj[1])    # converts value from string to number
@@ -207,22 +207,17 @@ def primary(waterField):            # function required for ArcGIS Pro code bloc
 """)
 
     # Step 4 B - Static Water Level - Calculate Field
-    arcpy.management.CalculateField(in_table=tables[0], field="SWL", expression="statWater(!SWL!)", code_block="""import re
-def statWater(waterField):          # function required for ArcGIS Pro code block
-    def ft2m(conv):
-        val = float(conv.group(1))
-        if conv.group(2) == " ft":  # checks for ft vs m
-            val=round((float(conv.group(1))*0.3048),1)  # converts ft to m, rounds to 1 decimal
-            return str(val)            
-        elif conv.group(2) == " m": # checks for m
-            val = round(float(conv.group(1)),1)     # rounds to 1 decimal
-            return str(val)
-    converted = re.sub('([\d\.]+)(\s*\w+)',ft2m,waterField) # calls the function for unit conversion
-    return converted
-""")
+    swlSearch = tableFields[0][12]
+    with arcpy.da.UpdateCursor(tables[0],swlSearch) as cursor:
+        for row in cursor:
+            for each in range(len(row)):
+                converted = re.sub('([\d\.]+)\s*(\w+)',ft2m,row[each])
+                row[each] = converted
+            cursor.updateRow(row)
+
 
     # Part 4 C - Pumping info - Populate and Convert
-    ptSearch = ['WELL_ID','PT','RPR','PUMPDUR'] #fields to reference and update
+    ptSearch = [tableFields[0][0],tableFields[0][13],tableFields[0][14],tableFields[0][15]] #fields to reference and update
     with arcpy.da.UpdateCursor(tables[0], ptSearch) as cursor:  # create the update cursor
         for row in cursor:
             # print('Row:',row)
@@ -240,7 +235,7 @@ def statWater(waterField):          # function required for ArcGIS Pro code bloc
                 cursor.updateRow(row)
     
     # Part 4 D - Borehole_Results - Convert
-    bhrSearch = ['HOLE_D','HOLE_T','HOLE_B','CAS_D','CAS_T','CAS_B','SCRN_D','SCRN_T','SCRN_B'] #fields to reference and update
+    bhrSearch = [tableFields[2][1:]] #fields to reference and update
     with arcpy.da.UpdateCursor(tables[2], bhrSearch) as cursor:  # create the update cursor
         for row in cursor:
             for each in range(len(row)):    # divides the row by field

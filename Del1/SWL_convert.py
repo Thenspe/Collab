@@ -12,26 +12,25 @@
 
 # Put them back into WAT, delimited by semicolon.
 
-# example_data = ""
-example_data = "8"
-# example_data = "40 ft"
-# example_data = "6.79 m"
+import arcpy
+import re
 
-#import arcpy    # arcpy, so we can turn it into a tool in ArcPro
-import re       # regular expressions for string manipulation
+workspace="D:\\FlemSem3\\Collab\\CollabProj\\CollabProj.gdb"    # do not include these three lines if you bring it into Pro
+arcpy.env.workspace = workspace
+arcpy.env.overwriteOutput = True
+
+example_data = '45 m'
 
 def statWater(waterField):
     def ft2m(conv):
         val = float(conv.group(1))
         if conv.group(2) == " ft": 
             val=round((float(conv.group(1))*0.3048),1)
-            return str(val)
+            return str(val)            
         elif conv.group(2) == " m":
             val = round(val,1)
             return str(val)
     converted = re.sub('([\d\.]+)(\s*\w+)',ft2m,waterField)
     return converted
 
-# for testing only
 print(statWater(example_data))
-print()

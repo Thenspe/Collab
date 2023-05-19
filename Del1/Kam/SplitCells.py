@@ -115,7 +115,7 @@ if file == SoI:
     # print()
     # # Create a new feature class to store the selected site file in
     # newfc = arcpy.CreateFeatureclass_management(gdb, os.path.basename(file).split('.')[0], "POLYGON", "", "", "", sr)
-    fc = arcpy.FeatureClassToGeodatabase_conversion(file, gdb)
+    # fc = arcpy.FeatureClassToGeodatabase_conversion(file, gdb)
     print("New site feature class created and added to gdb!")
     print()
     # Create a string variable for buffer feature class

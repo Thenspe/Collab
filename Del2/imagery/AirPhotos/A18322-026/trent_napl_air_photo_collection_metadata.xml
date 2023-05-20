@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<metadata xmlns="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://purl.org/dc/elements/1.1/ http://dublincore.org/schemas/xmls/qdc/2008/02/11/dc.xsd">
+<dc:identifier nilReason="unknown"/>
+<dc:language>eng; CAN</dc:language>
+<dc:title>Trent University Library Historical Aerial Photography - OMNRF</dc:title>
+<dc:contributor>Maps, Data and Government Information Centre (MaDGIC), Trent University Library</dc:contributor>
+<dc:contributor>Trent University Library</dc:contributor>
+<dc:contributor>Ontario Ministry of Natural Resources and Forestry (OMNRF)</dc:contributor>
+<dc:publisher>Maps, Data and Government Information Centre (MaDGIC), Trent University Library</dc:publisher>
+<dc:creator>Ontario Ministry of Natural Resources and Forestry</dc:creator>
+<dc:description>Historical black and white aerial photography covering areas of south central Ontario with a focus on Peterborough County and surrounding area. Capture dates range from 1969 to 1993 at varying scales. The physical photos were scanned to 16-bit greyscale TIFF images and georeferenced by the Maps, Data and Government Information Centre of Trent University Library using the North American Datum (NAD83)</dc:description>
+<dc:format>TIFF</dc:format>
+<dcterms:rights>Photos available for download by registered members of Trent University</dcterms:rights>
+<dcterms:rightsHolder>Ontario Ministry of Natural Resources and Forestry</dcterms:rightsHolder>
+<dcterms:spatial>Spatial coverage is concentrated around Peterborough County and surrounding areas, with intermittent coverage extending south to Northumberland County, west into the Regional Municipality of Durham, and east into Quinte West</dcterms:spatial>
+<dcterms:temporal>1969-1993</dcterms:temporal>
+</metadata>

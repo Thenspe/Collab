@@ -70,6 +70,18 @@ while i < 30 and not_found:
 
 print(wellsLoc)
 
+url = 'https://ws.lioservices.lrc.gov.on.ca/arcgis1071a/rest/services/MOE/Wells/MapServer/0?f=pjson'
+
+def print_json(input):
+    print(input)
+
+if __name__ == '__main__':
+    r = requests.get(url).json()
+    print_json(r)
+
+wellwell = print_json()
+print(wellwell)
+
 # ## Option Three ##
 # # Use the argis.features modules to directly make a new feature class within the gdb from the REST Endpoint
 # # Rest Endpoint URL
@@ -97,7 +109,7 @@ for file in os.listdir(conSites):
         n = print(os.path.basename(file).split('.')[0])
         print("Directory Files Printed.")
 
-print(file)
+# print(file)
 
 # Site shapefile location
 x = "Y:\Fleming\Collab Project\CambiumSampleData\Site\Site.shp" # This is hardcoded temporairly for PoC
@@ -119,7 +131,7 @@ if file == SoI:
     print("New site feature class created and added to gdb!")
     print()
     # Create a string variable for buffer feature class
-    newSite = "siteBuffer"
+    newSite = "siteBuffer_url"
     # Print statements
     print("Buffering Site of Interest...")
     print("Finishing...")
@@ -142,13 +154,15 @@ else:
 # First create a string variable for buffer clip feature class
 wellSites = "wellClip"
 
-# This will provide us with the subset of the records and wells that we need.
-# Now we can clip the wells to the site buffer                        
-Wells = arcpy.Clip_analysis(wellsLoc, siteBuf, wellSites)
+# # This will provide us with the subset of the records and wells that we need.
+# # Now we can clip the wells to the site buffer                        
+# Wells = arcpy.Clip_analysis(wellwell, siteBuf, wellSites)
 
-# # now that our site is buffered, and wells of interest are clipped to that buffer,
-# # we can intersect the report table to the study area
-# wellSoI = arcpy.Intersect_analysis([Wells, serverURL], "WoI")
+# now that our site is buffered, and wells of interest are clipped to that buffer,
+# we can intersect the report table to the study area
+wellSoI = arcpy.Intersect_analysis([siteBuf, wellwell], "WoI")
+
+wells = arcpy.server.ExtractDataTask(wellsLoc, siteBuf, '')
 
 
 

@@ -1,6 +1,6 @@
-import parse_georaster from "georaster";
+var parse_georaster = require("georaster");
 
-import GeoRasterLayer from "georaster-layer-for-leaflet";
+var GeoRasterLayer = require("georaster-layer-for-leaflet");
 
 // initalize leaflet map
 var map = L.map('map').setView([45.000, -78.304], 8);

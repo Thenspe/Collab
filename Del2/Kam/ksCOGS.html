@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!-- 
+    Exploration of Leaflet capabilities
+-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Leaflet Testing</title>
+
+        <!-- leaflet CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+            integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+            crossorigin=""/>
+        <!-- geocoding stylesheet -->
+        <link rel="stylesheet"
+            href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
+        <!-- Our site's CSS -->
+        <link rel="stylesheet" href="stylesMain.css"/>
+        <style>
+            #map {
+                bottom: 20px;
+                left: 20px;
+                position: absolute;
+                right: 20;
+                top: 50px;
+                }
+        </style>
+
+        <!-- leaflet javascript library -->
+        <!-- <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+            crossorigin="">
+        </script> -->
+        <!-- geocoder javascript -->
+        <!-- <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js">
+        </script> -->
+        <!-- add air photo database GeoJSON file-->
+        <!-- <script src="AirphotoDatabase.json"></script> -->
+        <!-- add air photo database JavaScript file-->
+        <!-- <script src = "APmap.js"></script> -->
+        <!-- Load the georaste-layer-for-leafet package -->
+        <!-- <script src="https://unpkg.com/georaster-layer-for-leaflet/dist/georaster-layer-for-leaflet.min.js"></script> -->
+        <!-- Our site's CSS -->
+        <!-- <link rel="stylesheet" href="stylesMain.css"/> -->
+
+    </head>
+    <body>
+        <!-- Georaste-layer-for-leafet load COG via script tag -->
+        <div id="map"></div>
+        <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/proj4"></script>
+        <script src="https://unpkg.com/georaster"></script>
+        <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+        <!-- add air photo database JavaScript file-->
+        <script src = "ksCOGS.js"></script>
+        <script>
+            // initalize leaflet map
+            var map = L.map('map').setView([45.000, -78.304], 8);
+
+            // add OpenStreetMap basemap
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            var url_to_geotiff_file = "images/A16868-154.tif.aux.xml";
+
+            parseGeoraster(url_to_geotiff_file).then(georaster => {
+                console.log("georaster:", georaster);
+
+                /*
+                    GeoRasterLayer is an extension of GridLayer,
+                    which means can use GridLayer options like opacity.
+
+                    Just make sure to include the georaster option!
+
+                    http://leafletjs.com/reference-1.2.0.html#gridlayer
+                */
+                var layer = new GeoRasterLayer({
+                    attribution: "Planet",
+                    georaster: georaster,
+                    resolution: 128
+                });
+                layer.addTo(map);
+
+                map.fitBounds(layer.getBounds());
+
+                });
+
+        </script>
+
+        <header>
+            <img id="logo" src="images/SEKgroup.png" alt="SEK Logo">
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="index.html#COG">COG</a>
+                <a href="index.html#AGOL" target="_blank">AGOL Map</a>
+                <a href="COGmap.html">Leaflet Map</a>
+                <a href="airphotomap.html">Airphoto Map</a>
+                <a href="about.html">About</a>
+            </nav>
+        </header>
+        <!-- <main id="map">
+        </main>
+        <script src="APmap.js"></script> -->
+        <footer>
+            <p>copyright SEK Group 2022</p>
+        </footer>
+    </body>
+</html>

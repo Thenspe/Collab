@@ -1,0 +1,33 @@
+# Group P2306 Collaborative Project 2023
+# Members: Ewan, Kamryn, Stephen
+# designed using python 3.0
+# Deliverable One
+
+# Import necessary modules
+import arcpy 
+
+# Set gdb workspace 
+arcpy.env.workspace = "Y:\Fleming\Collab Project\P2306\P2306.gdb" # Update to your own workspace file path
+gdb = arcpy.env.workspace
+arcpy.env.overwriteOutput = True
+
+# Set the inout variables for the buffer distance and site location
+# Set the folder path for where the construction site files are stored
+wellLoc = "Y:\Fleming\Collab Project\P2306\P2306.gdb\Wells_selection"             # Update this to your well sites folder location 
+
+# Set the folder path for where the construction site files are stored
+conSites = "Y:\Fleming\Collab Project\CambiumSampleData\Site\Site.shp"            # Update this to your well sites folder location 
+
+# Set the buffer distance variable.                                               # Chnage to the necessaary distance required for site
+buffDis = "500 meters"
+# Create a string variable for buffer feature class
+newSite = "siteBuff"
+
+# Buffer the site
+siteBuf = arcpy.Buffer_analysis(conSites, newSite, buffDis)
+
+# now that our site is buffered, and wells of interest are clipped to that buffer, # Create a string variable for intersect feature class
+well = "intersectBuffer"
+# we can intersect the report table to the study area
+
+wellSoI = arcpy.Intersect_analysis([siteBuf, wellLoc], well)

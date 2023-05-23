@@ -8,17 +8,12 @@ intersect to reduce the number of wells, and outputs 3 tables, populated and wit
 import arcpy
 import re
 
-workspace="D:\\FlemSem3\\Collab\\CollabProj\\CollabProj.gdb"    # do not include these three lines if you bring it into Pro
-arcpy.env.workspace = workspace
-arcpy.env.overwriteOutput = True
-
-
 def script_tool(param0):   # master function
 
     dataTable = param0 # 'Wells_In_Buffer'
     tables = ['Wells_Type','Borehole_Results','Borehole_Details']
     tableFields = [     # Set the field names for the tables
-            #well_type  1       2       3           4                5                  6                  7           8       9     10       11      12   13   14    15
+            #well_type  1       2       3           4                5                  6                  7           8       9     10       11    12    13   14       15
             ['WELL_ID','TAG','EAST83','NORTH83','UTMZONE','WELL_COMPLETED_DATE','RECEIVED_DATE','FINAL_STATUS_DESCR','USE1','USE2','DEPTH_M','WAT','SWL','PT','RPR','PUMPDUR'],
             # borehole_results      3     4      5      6    7
             ['WELL_ID','Colour','Mat1','Mat2','Mat3','Top','Bot'],
@@ -83,6 +78,7 @@ def script_tool(param0):   # master function
             raise Exception("PT Unit is in neither GPM nor LPM.",conv.group(1),conv.group(2),row)
         
     ####################################################################################
+
     # Step 2 - Name and create the three tables
     t = 0
     while t < len(tables):
@@ -216,6 +212,7 @@ def primary(waterField):            # function required for ArcGIS Pro code bloc
                 converted = re.sub('([\d\.]+)\s*(\w+)',ft2m,row[each])
                 row[each] = converted
             cursor.updateRow(row)
+
 
     # Part 4 C - Pumping info - Populate and Convert
     ptSearch = [tableFields[0][0],tableFields[0][13],tableFields[0][14],tableFields[0][15]] #fields to reference and update

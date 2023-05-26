@@ -8,50 +8,48 @@ const Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/re
 });
 //Map declaration
 const map = L.map('map', {
-    center: [45.000, -78.304],
+    center: [44.5, -78],
     zoom: 8,
     layers: [osm, Esri_WorldImagery]            
 });
 // Add baselayer info as array for layer control, control added lower to put it
 // below the search bar
 const baseLayers = {
-    'OpenStreetMap': osm,
-    'Esri World Imagery': Esri_WorldImagery
+    'Esri World Imagery': Esri_WorldImagery,
+    'OpenStreetMap': osm
 };
 
 // add geosearch control
 var geocoder = L.Control.geocoder({
-    collapsed: false,
-    position: 'topright',
+    collapsed: false,       // keep it large
+    position: 'topright',   // put it in the upper right corner
     defaultMarkGeocode: false
 }).on('markgeocode', function(result) {
-    const coords = [result.geocode.center.lat, result.geocode.center.lng];
+    const coords = [result.geocode.center.lat, result.geocode.center.lng]; 
     var searchMarker = L.marker(coords, {
         draggable: true //create draggable marker
     }).addTo(map);
-    map.setView(coords,17);
+    map.setView(coords,17); // move the map view to the searched location
 })
 .addTo(map);
 
 //Add layer control button to switch between imagery and openstreetmap
-const layerControl = L.control.layers(baseLayers).addTo(map);
+const baseControl = L.control.layers(baseLayers,null,{position:'topleft'}).addTo(map);
 
-// var showMeAirPhotos = L.geoJSON()
-
-// add air photo database geojson
-var airphotos = L.geoJSON(photos, {
+var geoJsonLayers = {}; //to put the geojson into
+// add geojson to the map
+var airphotovector = L.geoJSON(airphotopoly, {   
   style: function(feature) {
-    return {color: 'blue'};
+    return {color: 'red'};  //colour the polygons
   },
-  onEachFeature: function (feature, info) {
-      info.bindPopup('<p>Photo ID: '+feature.properties.PHOTO_ID+'</p>')
-  }
-}).addTo(map);
-var airphotos2 = L.geoJSON(airpoly, {
-  style: function(feature) {
-    return {color: 'red'};
-  },
-  onEachFeature: function (feature, info) {
+  //on each feature, add a popup with the photo number and date
+  onEachFeature: function (feature, info) { 
       info.bindPopup('<p>Photo ID: '+feature.properties.PHOTO_ID+'</p>'+'<p>Photo Date: '+feature.properties.Photo_Date+'</p>')
   }
 }).addTo(map);
+
+// add layer control for sorting through the geojson
+const photoControl = L.control.layers(null,airphotovector,{collapsed:false}).addTo(map);
+// this control needs to:
+//  - show items from the geojson
+//  - restrict based on what is visible

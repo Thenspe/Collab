@@ -39,50 +39,74 @@ const baseControl = L.control.layers(baseLayers,null,{position:'topleft'}).addTo
 /////////////////////////////////////////////////////////////////////////////////////////
 // This section attempts to add a control to filter by decade
 
-var layerInfo = {
-    twenties: {source:"192", color: '#FE1A1A'},
-    thirties: {source:"193", color: '#FEAB1A'},
-    fourties: {source:"194", color: '#FEFE1A'},
-    fifties: {source:"195", color: '#82FE1A'},
-    sixties: {source:"196", color: '#32AE0E'},
-    seventies: {source:"197", color: '#1AFE89'},
-    eighties: {source:"198", color: '#1AFEFB'},
-    nineties: {source:"199", color: '#1A63FE'},
-    aughts: {source:"200", color: '#891AFE'},
-    ohtens: {source:"201", color: '#FE1AFB'},
-    ohtwenties: {source:"202", color: '#FE1A96'}
-};
+// var layerInfo = {
+//     twenties: {source:"192", color: '#FE1A1A'},
+//     thirties: {source:"193", color: '#FEAB1A'},
+//     fourties: {source:"194", color: '#FEFE1A'},
+//     fifties: {source:"195", color: '#82FE1A'},
+//     sixties: {source:"196", color: '#32AE0E'},
+//     seventies: {source:"197", color: '#1AFE89'},
+//     eighties: {source:"198", color: '#1AFEFB'},
+//     nineties: {source:"199", color: '#1A63FE'},
+//     aughts: {source:"200", color: '#891AFE'},
+//     ohtens: {source:"201", color: '#FE1AFB'},
+//     ohtwenties: {source:"202", color: '#FE1A96'}
+// };
 
-var geoJsonLayers = {}; //to put the geojson into
+// var geoJsonLayers = {}; //to put the geojson into
 
-for(var layer in layerInfo) {
-    geoJsonLayers[layer] = L.geoJSON(airphotopoly, {
-        filter: function(feature) {
-            if(feature.properties.date[layerInfo[layer].source] == feature.properties.date[layerInfo[layer]].slice(0,3)) {
-                return feature;
-            }
-        },
-        style: function(feature) {
-            return {
-                color: layerInfo[layer].color
-            }
-        },
-        onEachFeature: function (feature, info) { 
-            info.bindPopup('<p>Photo ID: '+feature.properties.PHOTO_ID+'</p>'+'<p>Photo Date: '+feature.properties.Photo_Date+'</p>')
-        }
-    }).addTo(map);
-};
+// for(var layer in layerInfo) {
+//     geoJsonLayers[layer] = L.geoJSON(airphotopoly, {
+//         filter: function(feature) {
+//             if(feature.properties.date[layerInfo[layer].source] == feature.properties.date.slice(0,2)) {
+//                 return feature;
+//             }
+//         },
+//         style: function(feature) {
+//             return {
+//                 color: layerInfo[layer].color
+//             }
+//         },
+//         onEachFeature: function (feature, info) { 
+//             info.bindPopup('<p>Photo ID: '+feature.properties.PHOTO_ID+'</p>'+'<p>Photo Date: '+feature.properties.Photo_Date+'</p>')
+//         }
+//     }).addTo(map);
+// };
 
-var sourcesLabels = {
-    "1920's": geoJsonLayers.photoLayer
-};
+// var sourcesLabels = {
+//     "1920's": geoJsonLayers.twenties,
+//     "1930's": geoJsonLayers.thirties,
+//     "1940's": geoJsonLayers.fourties,
+//     "1950's": geoJsonLayers.fifties,
+//     "1960's": geoJsonLayers.sixties,
+//     "1970's": geoJsonLayers.seventies,
+//     "1980's": geoJsonLayers.eighties,
+//     "1990's": geoJsonLayers.nineties,
+//     "2000's": geoJsonLayers.aughts,
+//     "2010's": geoJsonLayers.ohtens,
+//     "2020's": geoJsonLayers.ohtwenties
+// };
 
-// add layer control for sorting through the geojson
-var thingy = L.control.layers(null, sourcesLabels, {collapsed:false,position:'topright'}).addTo(map);
-// this control needs to:
-//  - show items from the geojson
-//  - restrict based on what is visible
+// // add layer control for sorting through the geojson
+// var imageControl = L.control.layers(null,sourcesLabels, {collapsed:false,position:'topright'}).addTo(map);
+// // this control needs to:
+// //  - show items from the geojson
+// //  - restrict based on what is visible
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // this section attempts to filter by map bounds
 
+var mapBounds = map.getBounds();
+console.log("Just testing.",mapBounds);
+
+map.on('move',function() {
+    mapBounds = map.getBounds()
+});
+
+L.geoJSON(airphotopoly, {
+    style: function(feature) {
+        return {color: 'yellow'}
+    }
+}).bindPopup(function (layer) {
+    return layer.feature.properties.date.slice(0,3);
+}).addTo(map);

@@ -1,43 +1,57 @@
-// var parse_georaster = require("georaster");
-
-// var GeoRasterLayer = require("georaster-layer-for-leaflet");
-
-// initalize leaflet map
-var map = L.map('map').setView([0, 0], 5);
-
-// add OpenStreetMap basemap
-L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-var url_to_geotiff_file = "https://thenspe.github.io/geom99project//images/A16868-154.tif.aux.xml";
-
-fetch(url_to_geotiff_file)
-  .then(response => response.arrayBuffer())
-  .then(arrayBuffer => {
-    parse_georaster(arrayBuffer).then(georaster => {
-      console.log("georaster:", georaster);
-
-      /*
-          GeoRasterLayer is an extension of GridLayer,
-          which means can use GridLayer options like opacity.
-
-          Just make sure to include the georaster option!
-
-          Optionally set the pixelValuesToColorFn function option to customize
-          how values for a pixel are translated to a color.
-
-          http://leafletjs.com/reference-1.2.0.html#gridlayer
-      */
-      var layer = new GeoRasterLayer({
-          georaster: georaster,
-          opacity: 0.7,
-          pixelValuesToColorFn: values => values[0] === 42 ? '#ffffff' : '#000000',
-          resolution: 64 // optional parameter for adjusting display resolution
-      });
-      layer.addTo(map);
-
-      map.fitBounds(layer.getBounds());
-
-  });
+// Add map baselayers
+const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 });
+const Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+});
+//Map declaration
+const map = L.map('map', {
+    center: [45.000, -78.304],
+    zoom: 8,
+    layers: [osm, Esri_WorldImagery]            
+});
+// Add baselayer info as array for layer control, control added lower to put it
+// below the search bar
+const baseLayers = {
+    'OpenStreetMap': osm,
+    'Esri World Imagery': Esri_WorldImagery
+};
+
+// add geosearch control
+var geocoder = L.Control.geocoder({
+    collapsed: false,
+    position: 'topright',
+    defaultMarkGeocode: false
+}).on('markgeocode', function(result) {
+    const coords = [result.geocode.center.lat, result.geocode.center.lng];
+    var searchMarker = L.marker(coords, {
+        draggable: true //create draggable marker
+    }).addTo(map);
+    map.setView(coords,17);
+})
+.addTo(map);
+
+//Add layer control button to switch between imagery and openstreetmap
+const layerControl = L.control.layers(baseLayers).addTo(map);
+
+// var showMeAirPhotos = L.geoJSON()
+
+// add air photo database geojson
+var airphotos = L.geoJSON(photos, {
+  style: function(feature) {
+    return {color: 'blue'};
+  },
+  onEachFeature: function (feature, info) {
+      info.bindPopup('<p>Photo ID: '+feature.properties.PHOTO_ID+'</p>')
+  }
+}).addTo(map);
+var airphotos2 = L.geoJSON(airpoly, {
+  style: function(feature) {
+    return {color: 'red'};
+  },
+  onEachFeature: function (feature, info) {
+      info.bindPopup('<p>Photo ID: '+feature.properties.PHOTO_ID+'</p>'+'<p>Photo Date: '+feature.properties.Photo_Date+'</p>')
+  }
+}).addTo(map);

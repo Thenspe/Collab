@@ -1,0 +1,15 @@
+Fields required:
+
+image number
+file path for image*
+coordinates for image
+location
+roll number
+photo number
+scale
+project number
+county
+photo date
+obtained from
+
+* should be able to generate this from image number

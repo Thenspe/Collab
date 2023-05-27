@@ -102,7 +102,7 @@ airVectors = L.geoJSON(airphotopoly, {  // add the geoJSON
     }
 }).bindPopup(function (layer) {
     return layer.feature.properties.date.slice(0,3);
-})//.addTo(map);;
+})//.addTo(map);
 
 // add a button to summon photos on a drawn layer or point
 var ourCustomControl = L.Control.extend({
@@ -112,9 +112,9 @@ var ourCustomControl = L.Control.extend({
     onAdd: function (map) {
         var container = L.DomUtil.create('button'); 
 
-        container.innerText = 'Find Aerial Imagery';
+        container.innerText = 'Find Aerial Imagery';    // text for button
         
-        container.style.backgroundColor = 'white';
+        container.style.backgroundColor = 'white';      // styles for the button
         container.style.borderWidth = '2px';
         container.style.borderColor = '#b4b4b4';
         container.style.borderRadius = '5px';
@@ -122,11 +122,14 @@ var ourCustomControl = L.Control.extend({
         container.style.width = '140px';
         container.style.height = '30px';
         
-        container.onclick = function(){
-            var drawnLayers = map.pm.getGeomanLayers(true);
-            console.log('Button has been clicked.');
-            console.log(drawnLayers);
-
+        container.onclick = function(){                 // what does the button do?
+            var drawnLayers = map.pm.getGeomanLayers(true);     // gets the drawn layers
+            //console.log('Button has been clicked.');    // writes to the console, to confirm the button works
+            airVectors.eachLayer(function (layer) {
+                if(L.bounds.overlaps(drawnLayers.getBounds())) {    //so, the goal here is to find where the drawn polygon overlaps part of the geojson
+                    console.log('it works')
+                }
+            });
         }
         return container;
     },

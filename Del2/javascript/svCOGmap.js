@@ -104,20 +104,29 @@ airVectors = L.geoJSON(airphotopoly, {  // add the geoJSON
     return layer.feature.properties.date.slice(0,3);
 })//.addTo(map);;
 
+// add a button to summon photos on a drawn layer or point
 var ourCustomControl = L.Control.extend({
     options: {
         position: 'topright'
     },
     onAdd: function (map) {
-        var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+        var container = L.DomUtil.create('button'); 
+
+        container.innerText = 'Find Aerial Imagery';
+        
         container.style.backgroundColor = 'white';
-        container.style.width = '80px';
+        container.style.borderWidth = '2px';
+        container.style.borderColor = '#b4b4b4';
+        container.style.borderRadius = '5px';
+        container.style.borderStyle = 'solid';
+        container.style.width = '140px';
         container.style.height = '30px';
+        
         container.onclick = function(){
             var drawnLayers = map.pm.getGeomanLayers(true);
             console.log('Button has been clicked.');
             console.log(drawnLayers);
-            
+
         }
         return container;
     },
@@ -131,6 +140,8 @@ map.pm.addControls({
     drawCircleMarker: false,
     drawRectangle: false
 });
-
+map.pm.setPathOptions(
+    {color: 'red'}
+);
 // var drawnLayers = map.pm.getGeomanLayers();
 // console.log(drawnLayers);

@@ -59,7 +59,7 @@ const baseControl = L.control.layers(baseLayers,null,{position:'topleft'}).addTo
 //     geoJsonLayers[layer] = L.geoJSON(airphotopoly, {
 //         filter: function(feature) {
 //             if(feature.properties.date[layerInfo[layer].source] == feature.properties.date.slice(0,2)) {
-//                 return feature;
+//                 return true;
 //             }
 //         },
 //         style: function(feature) {
@@ -71,7 +71,7 @@ const baseControl = L.control.layers(baseLayers,null,{position:'topleft'}).addTo
 //             info.bindPopup('<p>Photo ID: '+feature.properties.PHOTO_ID+'</p>'+'<p>Photo Date: '+feature.properties.Photo_Date+'</p>')
 //         }
 //     }).addTo(map);
-// };
+// }
 
 // var sourcesLabels = {
 //     "1920's": geoJsonLayers.twenties,
@@ -96,17 +96,41 @@ const baseControl = L.control.layers(baseLayers,null,{position:'topleft'}).addTo
 /////////////////////////////////////////////////////////////////////////////////////////
 // this section attempts to filter by map bounds
 
-var mapBounds = map.getBounds();
-console.log("Just testing.",mapBounds);
-
-map.on('move',function() {
-    mapBounds = map.getBounds()
-});
-
-L.geoJSON(airphotopoly, {
+airVectors = L.geoJSON(airphotopoly, {  // add the geoJSON
     style: function(feature) {
-        return {color: 'yellow'}
+        return {color: 'yellow'}    // and select the colour
     }
 }).bindPopup(function (layer) {
     return layer.feature.properties.date.slice(0,3);
-}).addTo(map);
+})//.addTo(map);;
+
+var ourCustomControl = L.Control.extend({
+    options: {
+        position: 'topright'
+    },
+    onAdd: function (map) {
+        var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+        container.style.backgroundColor = 'white';
+        container.style.width = '80px';
+        container.style.height = '30px';
+        container.onclick = function(){
+            var drawnLayers = map.pm.getGeomanLayers(true);
+            console.log('Button has been clicked.');
+            console.log(drawnLayers);
+            
+        }
+        return container;
+    },
+});
+map.addControl(new ourCustomControl());
+
+//add the drawing toolbar
+map.pm.addControls({
+    position: 'topleft',
+    drawCircle: false,
+    drawCircleMarker: false,
+    drawRectangle: false
+});
+
+// var drawnLayers = map.pm.getGeomanLayers();
+// console.log(drawnLayers);

@@ -96,13 +96,20 @@ const baseControl = L.control.layers(baseLayers,null,{position:'topleft'}).addTo
 /////////////////////////////////////////////////////////////////////////////////////////
 // this section attempts to filter by map bounds
 
-airVectors = L.geoJSON(airphotopoly, {  // add the geoJSON
+// var airVectors = L.geoJSON(airphotopoly, {  // add the geoJSON
+//     style: function(feature) {
+//         return {color: 'yellow'}    // and select the colour
+//     }
+// }).bindPopup(function (layer) {
+//     return layer.feature.properties.date.slice(0,3);
+// }).addTo(map);
+
+const aerials = $.getJSON('geojson/aerials.json')
+L.geoJSON(aerials, {
     style: function(feature) {
-        return {color: 'yellow'}    // and select the colour
+        return {color: 'yellow'}
     }
-}).bindPopup(function (layer) {
-    return layer.feature.properties.date.slice(0,3);
-})//.addTo(map);
+}).addTo(map);
 
 // add a button to summon photos on a drawn layer or point
 var ourCustomControl = L.Control.extend({

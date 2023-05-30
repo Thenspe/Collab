@@ -104,10 +104,10 @@ const baseControl = L.control.layers(baseLayers,null,{position:'topleft'}).addTo
 //     return layer.feature.properties.date.slice(0,3);
 // }).addTo(map);
 
-const aerials = $.getJSON('geojson/aerials.json')
+const aerials = $.getJSON('geojson/aerials.json') // attempt to call the geojson into variable via jquery
 L.geoJSON(aerials, {
     style: function(feature) {
-        return {color: 'yellow'}
+        return {color: 'yellow'}    // and make it yellow
     }
 }).addTo(map);
 
@@ -122,9 +122,9 @@ var ourCustomControl = L.Control.extend({
         container.innerText = 'Find Aerial Imagery';    // text for button
         
         container.style.backgroundColor = 'white';      // styles for the button
-        container.style.borderWidth = '2px';
-        container.style.borderColor = '#b4b4b4';
-        container.style.borderRadius = '5px';
+        container.style.borderWidth = '2px';            // these options make it look like
+        container.style.borderColor = '#b4b4b4';        // all of the other buttons that
+        container.style.borderRadius = '5px';           // are already there
         container.style.borderStyle = 'solid';
         container.style.width = '140px';
         container.style.height = '30px';
@@ -146,12 +146,12 @@ map.addControl(new ourCustomControl());
 //add the drawing toolbar
 map.pm.addControls({
     position: 'topleft',
-    drawCircle: false,
-    drawCircleMarker: false,
-    drawRectangle: false
+    drawCircle: false,  // remove the option to draw circles
+    drawCircleMarker: false,    // remove the option to draw circle markers
+    drawRectangle: false    // remove the option to draw rectangles
 });
 map.pm.setPathOptions(
-    {color: 'red'}
+    {color: 'red'}  // turns drawn polygons red - standard for Cambium sites
 );
 // var drawnLayers = map.pm.getGeomanLayers();
 // console.log(drawnLayers);

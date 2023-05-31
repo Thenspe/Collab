@@ -16,6 +16,10 @@
     <!-- Our site's CSS -->
     <link rel="stylesheet" href="stylesMain.css"/>
 
+    <!-- Search function -->
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css">
+
   </head>
   <body>
     <!-- <script>
@@ -64,8 +68,18 @@
             </nav>
         </header>
         <main id="map"> </main>
+        <!-- Our Java Script files -->
         <script src="ksCOGS2.js"></script>
-        <script src="getimageinfo.js"></script>
+        <script src="bundle.js"></script>
+        <script src="search.js"></script>
+
+        <!-- Search function script-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+
+        <!-- geoJSON file -->
+        <script src="data/at.geojson"></script>
+        
+        <!-- Leaflet plugins: leaflet, and georastr layer for leafflet-->
         <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
         <script src="https://unpkg.com/proj4"></script>
         <script src="https://unpkg.com/georaster"></script>

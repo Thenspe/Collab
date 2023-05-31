@@ -43,5 +43,28 @@ if (!url_to_geotiff_file) {
         map.fitBounds(layer.getBounds());
 
       });
+
+      var items = [];
+      var at_states = L.geoJson(at, {
+        onEachFeature: function(data, layer) {
+          items.push(layer);
+          layer.bindPopup('<b>' + data.properties.name + '</b><br>'
+            + data.properties.cities + ' Cities'+'<br>'
+            + data.properties.towns + ' Towns'+'<br>'
+            + data.properties.density + ' People / km<sup>2</sup>');
+        }
+      }).addTo(map);
+      
+      var baseLayers = {
+        "ESRI World Imagery": esri_WorldImagery,
+        "ESRI World Terrain": esri_WorldTerrain
+      };
+      
+      var overLayers = {
+        "Austrian States": at_states
+      }
+      
+      L.control.layers(baseLayers, overLayers).addTo(map);
+      L.control.search({data: items}).addTo(map);
+
     }
-  

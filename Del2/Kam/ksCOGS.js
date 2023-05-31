@@ -3,7 +3,13 @@ var parse_georaster = require("georaster");
 var GeoRasterLayer = require("georaster-layer-for-leaflet");
 
 // initalize leaflet map
-var map = L.map('map').setView([45.000, -78.304], 8);
+var map = L.map('map').setView([-78.304, 45.000], 8);  
+
+// long lat
+// -78.304, 45.000
+
+// lat long
+//45.000, -78.304
 
 // add OpenStreetMap basemap
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

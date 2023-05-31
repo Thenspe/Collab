@@ -16,7 +16,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-var url_to_geotiff_file = "imagery/COGscreen1.jpg";
+var url_to_geotiff_file = "imagery/AirPhotos/A02033-009.tif";
 
 fetch(url_to_geotiff_file)
   .then(response => response.arrayBuffer())

@@ -1,0 +1,122 @@
+<!--
+GEOM99 project - final website
+Created by Stephen VanDam, Kamryn Sandiford, Ewan Harris
+This file is intended for use as the final submission for GEOM99 final project, edited and added to by all
+contributors. That may change as time goes on, not really a big deal.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>SEK Group - GEOM99 Final Project</title>
+        <!-- Leaflet-required CSS and JS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+        crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+            crossorigin=""></script>
+        <!-- geocoder javascript -->
+        <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js">
+        </script>
+        <!-- add air photo database GeoJSON file-->
+        <script src="imagery/AirPhotos/AirphotoDatabase.json">
+        </script>
+        <!-- Our site's CSS -->
+        <link rel="stylesheet" href="stylesMain.css"/>
+    </head>
+    <body>
+        <header>
+            <img id="logo" src="imagery/SEKgroup.png" alt="SEK Logo">
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="index.html#COG">COG</a>
+                <a href="index.html#AGOL" target="_blank">AGOL Map</a>
+                <a href="COGmap.html">Leaflet Map</a>
+                <a href="airphotomap.html">Airphoto Map</a>
+                <a href="about.html">About</a>
+            </nav>
+        </header>
+        <main>
+            <section id="problem">
+                <h1>Problem Statement</h1>
+                <p>Explore the Cloud Optimized GeoTiff (COG) format, and how it works within AGOL or similar for photo access.</p>
+                <h2>What is Cloud Optimized GeoTIFF?</h2>
+                <p>Cloud Optimized GeoTIFF (or COG) is an image format optimized for use in the web.
+                    It is a modified form of GeoTIFF, which is just a Georeferenced TIFF, which
+                    stands for Tagged Image Format. Regular images on the web load vertically,
+                    line-by-line, and in their entirety. COG are able to load in tiles, small squares
+                    at a time, and can stop loading when they exit the viewing area. This should allow for 
+                    faster loading and much less bandwidth consumption. Additionally, they can store
+                    multiple versions of an image at different zoom levels called 'overviews', which
+                    can also cause the image to load faster. This is because the overivew can be sent
+                    to the browser instead of the entire image, which would then have to be rendered
+                    in place to represent any pixels that can't be individually loaded.
+                </p>
+                <h2>What is AGOL?</h2>
+                <p>AGOL, or ArcGIS Online, is a mapping solution created by Esri. It was originally
+                    considered for this project for its known capabilities and convenience, however
+                    it eventually set aside due to budgetary constraints.
+                </p>
+                <h2>What is Leaflet?</h2>
+                <p>Leaflet is a lightweight, open-source javascript mapping library. It is fast, easy
+                    to use and learn, and very capable. It is also free-to-use and open source, with
+                    a lot of community support and 3rd-party extensions that can be used. After reviewing
+                    several options, it was selected as the web mapping library of choice for our project.
+                </p>
+                <h2>What is our process?</h2>
+                <p>We used GDAL to convert a GeoTIFF to COG. For exploration purposes, we attempted it in
+                    both ArcGIS Pro and QGIS. We also developed a basic Leaflet application, and attempted
+                    to get a few different image formats to load - COG, GeoTIFF, and a regular PNG.
+                </p>
+            </section>
+            <section id="COG">
+                <h1>Exploring the Cloud-Optimized GeoTIFF Format</h1>
+                <h2>ArcGIS Pro and QGIS GeoTIFF conversion processes</h2>
+                <p>The following images and captions describe the steps taken to convert Cambium Inc's aerial images 
+                    leveraging the GDAL library</p>
+                <figure>
+                    <img src="imagery/COGscreen1.jpg" alt="COG Process stage 1: ArcGIS Pro" style="max-width:887px">
+                    <figcaption>Figure 1. Exporting GeoTIFF to a new GOG format in ArcGIS Pro</figcaption>
+                </figure>
+                <figure>
+                    <img src="imagery/COGscreen2.jpg" alt="COG Process stage 2: ArcGIS Pro" style="max-width:871px">
+                    <figcaption>Figure 2. Geoprocessing Step (Tool) > Copy Raster – used to convert GeoTIFF into a COG, stored in a Geodatabase.</figcaption>
+                </figure>
+                <figure>
+                    <img src="images/COGscreen3.jpg" alt="COG Process stage 3: QGIS" style="max-width:404px">
+                    <figcaption> Figure 3. QGIS Command Prompt (OSGeo4W Shell) used to access GDAL library
+                        Enter command > gdalinfo – plus the GeoTIFF filename and path to obtain all the metadata.
+                    </figcaption>
+                </figure>
+                <figure>
+                    <img src="imagery/COGscreen4.jpg" alt="COG Process stage 4: QGIS" style="max-width:800px">
+                    <figcaption>Figure 4. Code to run the conversion from a GeoTIFF to a COG; places new format (COG) in the Command Prompt’s folder</figcaption>
+                </figure>
+                <figure>
+                    <img src="imagery/COGscreen5.jpg" alt="COG Process stage 5: QGIS Command Prompt" style="max-width:301px">
+                    <figcaption>Figure 5. gdalinfo command to obtain new COG file metadata; shows same information as original GeoTIFF (e.g. coordinate system)</figcaption>
+                </figure>
+                <figure>
+                    <img src="imagery/COGscreen6.jpg" alt="COG Process stage 6: ArcGIS Pro" style="max-width:800px">
+                    <figcaption>Figure 6. Newly created COG file displayed in ArcGIS Pro.</figcaption>
+                </figure>
+            </section>
+            </section>
+            <section id="AGOL">
+                <h1>Displaying an aerial image on ArcGIS Online (AGOL)</h1>
+                <h2>Imagery formally a Cloud-Optimized GeoTIFF, now converted to a poloygon</h2>
+                <p>In order for an raster based aerial image, like a GeoTIFF, to display in ArcGIS Online, it has to be converted to a polygon
+                    before the image can be shared as a web layer. </p>
+                <a href="https://fleming.maps.arcgis.com/apps/mapviewer/index.html?webmap=d7d064df9ee6421bb9f98e84351463a6" target="_blank">Click here to view. Warning! It takes a while to load.<a>
+            </section>
+            <figure>
+                <img src="imagery/COG_Polygon.jpg" alt="COG AGOL map" style="max-width:1900px; width: 100%;">
+                <figcaption>Figure 7. COG converted to polygon in ArcGIS Pro.</figcaption>
+            </figure>
+        </main>
+        <footer>
+            <p>copyright SEK Group 2022</p>
+        </footer>
+    </body>
+</html>

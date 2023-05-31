@@ -1,3 +1,7 @@
+var parse_georaster = require("georaster");
+
+var GeoRasterLayer = require("georaster-layer-for-leaflet");
+
 // initalize leaflet map
 var map = L.map('map').setView([0, 0], 5);
 

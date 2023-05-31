@@ -1,5 +1,5 @@
 // Initialize leaflet.js
-var L = require('leaflet');
+var L = require('./leaflet');
 
 // Initialize the map
 var map = L.map('map', {

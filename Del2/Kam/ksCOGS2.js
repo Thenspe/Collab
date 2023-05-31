@@ -49,8 +49,6 @@ if (!url_to_geotiff_file) {
         attribution: "Unknown",
         georaster,
             resolution: 128,
-        airphotos,
-            resolution: 128
         });
         layer.addTo(map);
 

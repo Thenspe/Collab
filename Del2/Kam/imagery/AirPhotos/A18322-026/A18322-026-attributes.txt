@@ -1,0 +1,30 @@
+Photo ID,A18322-026.tif
+Year Captured,1964
+Date Captured,9/28/1964
+Roll,A18322
+Flightline,8W
+Photo number,26.0
+MaDGIC Holdings Box number,65
+Photo Height,9.0
+Photo Width,9.0
+NTS Map Number,031D01
+NTS Map Name,RICE LAKE
+Geographic Area,
+Angle,0.0
+Season Code,2
+Altitude,9085.0
+Scale,20000.0
+Camera,RC 5A
+Lens,15 AG 99
+Focal Length (mm),153.0
+Focal Length (in),6.02
+Frames,99
+Film Colour Code,
+Film Size,9.5
+Film Type,CRONAR
+Centroid Y,44.19
+Centroid X,-78.39
+X Min,-78.41
+Y Min,44.17
+X Max,-78.37
+Y Max,44.21

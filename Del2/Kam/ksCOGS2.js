@@ -28,7 +28,7 @@ if (!url_to_geotiff_file) {
   setTimeout(function() {
     // if didn't pass in a url, redirect to planet example
     const parser = new URL(window.location);
-    parser.searchParams.set("url", "https://github.com/Thenspe/P2306/blob/main/Del2/imagery/AirPhotos/A02033-009.tif");
+    parser.searchParams.set("url", "https://github.com/Thenspe/P2306/blob/main/Del2/Kam/imagery/AirPhotos/A02033-009.tif");
 
     window.location = parser.href;
   }, 2 * 1000);

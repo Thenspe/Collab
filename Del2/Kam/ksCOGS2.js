@@ -28,19 +28,19 @@ const baseLayers = {
   'Esri World Imagery': Esri_WorldImagery
 };
 
-// add geosearch control
-var geocoder = L.Control.geocoder({
-  collapsed: false,
-  position: 'topright',
-  defaultMarkGeocode: false
-}).on('markgeocode', function(result) {
-  const coords = [result.geocode.center.lat, result.geocode.center.lng];
-  var searchMarker = L.marker(coords, {
-      draggable: true //create draggable marker
-  }).addTo(map);
-  map.setView(coords,17);
-})
-.addTo(map);
+// // add geosearch control
+// var geocoder = L.Control.geocoder({
+//   collapsed: false,
+//   position: 'topright',
+//   defaultMarkGeocode: false
+// }).on('markgeocode', function(result) {
+//   const coords = [result.geocode.center.lat, result.geocode.center.lng];
+//   var searchMarker = L.marker(coords, {
+//       draggable: true //create draggable marker
+//   }).addTo(map);
+//   map.setView(coords,17);
+// })
+// .addTo(map);
 
 //Add layer control button to switch between imagery and openstreetmap
 const layerControl = L.control.layers(baseLayers).addTo(map);

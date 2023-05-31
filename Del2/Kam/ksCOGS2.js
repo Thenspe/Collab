@@ -28,7 +28,8 @@ if (!url_to_geotiff_file) {
   setTimeout(function() {
     // if didn't pass in a url, redirect to planet example
     const parser = new URL(window.location);
-    parser.searchParams.set("url", "https://storage.googleapis.com/pdd-stac/disasters/hurricane-harvey/0831/20170831_172754_101c_3b_Visual.tif");
+    parser.searchParams.set("url", "https://github.com/Thenspe/P2306/blob/main/Del2/imagery/AirPhotos/A02033-009.tif");
+    // "https://storage.googleapis.com/pdd-stac/disasters/hurricane-harvey/0831/20170831_172754_101c_3b_Visual.tif");
     window.location = parser.href;
   }, 2 * 1000);
 } else {

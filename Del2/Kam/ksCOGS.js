@@ -16,7 +16,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-var url_to_geotiff_file = "imagery/AirPhotos/A16868_154_COG.TIF.aux.xml";
+var url_to_geotiff_file = "https://storage.googleapis.com/pdd-stac/disasters/hurricane-harvey/0831/20170831_172754_101c_3b_Visual.tif";
 
 fetch(url_to_geotiff_file)
   .then(response => response.arrayBuffer())

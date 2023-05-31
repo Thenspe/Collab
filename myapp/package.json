@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "uniq": "^1.0.1"
+  },
+  "name": "p2306",
+  "description": "Shared code workspace for the P2306 Collaborative Project.",
+  "version": "1.0.0",
+  "main": "main.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

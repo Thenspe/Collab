@@ -6,8 +6,8 @@ var GeoRasterLayer = require("georaster-layer-for-leaflet");
 var map = L.map('map').setView([45.000, -78.304], 8);
 
 // add OpenStreetMap basemap
-L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
 var url_to_geotiff_file = "imagery/AirPhotos/A02033-009.tif";

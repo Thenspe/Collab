@@ -16,15 +16,6 @@
     <!-- Our site's CSS -->
     <link rel="stylesheet" href="stylesMain.css"/>
 
-    <style>
-      #map {
-        bottom: 25;
-        left: 25;
-        position: absolute;
-        right: 25;
-        top: 50;
-      }
-    </style>
   </head>
   <body>
     <!-- Georaste-layer-for-leafet load COG via script tag -->
@@ -33,14 +24,12 @@
     <script src="https://unpkg.com/proj4"></script>
     <script src="https://unpkg.com/georaster"></script>
     <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
-
-    <script src="bundle.js"></script>
-    
-
-    <!-- add air photo database JavaScript file
+    <!-- add air photo database GeoJSON file-->
+    <script src="imagery/AirPhotos/AirphotoDatabase.json"></script>
+    <!-- add air photo database JavaScript file -->
     <script src = "ksCOGS.js"></script>
 
-    <script>
+    <!-- <script>
         // initalize leaflet map
         var map = L.map('map').setView([45.000, -78.304], 8);
 
@@ -71,9 +60,9 @@
 
             map.fitBounds(layer.getBounds());
 
-        }); -->
+        }); 
+        </script> -->
 
-        </script>
         <header>
             <img id="logo" src="imagery/SEKgroup.png" alt="SEK Logo">
             <nav>
@@ -87,7 +76,7 @@
         </header>
         <main id="map">
         </main>
-        <script src="ksCOGS.js"></script>
+        <script src="bundle.js"></script>
         <footer>
             <p>copyright SEK Group 2022</p>
         </footer>

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "georaster-layer-for-leaflet": "^3.10.0",
     "uniq": "^1.0.1"
   }
 }

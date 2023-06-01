@@ -8,7 +8,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // Load the GeoTIFF file
-var url = 'C:\Courses\GEOM68\Sandbox\GEOM68_WellWaterDB\P2306\Del2\javascript\ehCOGmap.js';
+var url = 'C:\Courses\GEOM68\Sandbox\GEOM68_WellWaterDB\P2306\Del2\imagery\AirPhotos\A02033-009.tif';
 fetch(url)
     .then(function(response) {
         return response.arrayBuffer();

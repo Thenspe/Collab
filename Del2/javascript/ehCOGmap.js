@@ -8,7 +8,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // Load the GeoTIFF file
-var url = 'https://ssfcollege.sharepoint.com/:i:/r/sites/CollabTeam2306/Shared%20Documents/General/images/A16868-154_COG.TIF?csf=1&web=1&e=sV5xaU';
+var url = 'C:\Courses\GEOM68\Sandbox\GEOM68_WellWaterDB\P2306\Del2\javascript\ehCOGmap.js';
 fetch(url)
     .then(function(response) {
         return response.arrayBuffer();

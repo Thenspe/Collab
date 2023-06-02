@@ -39,56 +39,56 @@ const baseControl = L.control.layers(baseLayers,null,{position:'topleft'}).addTo
 /////////////////////////////////////////////////////////////////////////////////////////
 // This section attempts to add a control to filter by decade
 
-// var layerInfo = {
-//     twenties: {source:"192", color: '#FE1A1A'},
-//     thirties: {source:"193", color: '#FEAB1A'},
-//     fourties: {source:"194", color: '#FEFE1A'},
-//     fifties: {source:"195", color: '#82FE1A'},
-//     sixties: {source:"196", color: '#32AE0E'},
-//     seventies: {source:"197", color: '#1AFE89'},
-//     eighties: {source:"198", color: '#1AFEFB'},
-//     nineties: {source:"199", color: '#1A63FE'},
-//     aughts: {source:"200", color: '#891AFE'},
-//     ohtens: {source:"201", color: '#FE1AFB'},
-//     ohtwenties: {source:"202", color: '#FE1A96'}
-// };
+var layerInfo = {
+    twenties: {source:"1988-05-05T00:00:00.000Z", color: '#FE1A1A'},
+    thirties: {source:"1927-10-20T00:00:00.000Z", color: '#FEAB1A'},
+    fourties: {source:"194", color: '#FEFE1A'},
+    fifties: {source:"195", color: '#82FE1A'},
+    sixties: {source:"196", color: '#32AE0E'},
+    seventies: {source:"197", color: '#1AFE89'},
+    eighties: {source:"198", color: '#1AFEFB'},
+    nineties: {source:"199", color: '#1A63FE'},
+    aughts: {source:"200", color: '#891AFE'},
+    ohtens: {source:"201", color: '#FE1AFB'},
+    ohtwenties: {source:"202", color: '#FE1A96'}
+};
 
-// var geoJsonLayers = {}; //to put the geojson into
+var geoJsonLayers = {}; //to put the geojson into
 
-// for(var layer in layerInfo) {
-//     geoJsonLayers[layer] = L.geoJSON(airphotopoly, {
-//         filter: function(feature) {
-//             if(feature.properties.date[layerInfo[layer].source] == feature.properties.date.slice(0,2)) {
-//                 return true;
-//             }
-//         },
-//         style: function(feature) {
-//             return {
-//                 color: layerInfo[layer].color
-//             }
-//         },
-//         onEachFeature: function (feature, info) { 
-//             info.bindPopup('<p>Photo ID: '+feature.properties.PHOTO_ID+'</p>'+'<p>Photo Date: '+feature.properties.Photo_Date+'</p>')
-//         }
-//     }).addTo(map);
-// }
+for(var layer in layerInfo) {
+    geoJsonLayers[layer] = L.geoJSON(airphotopoly, {
+        filter: function(feature) {
+            if(feature.properties.date[layerInfo[layer].source]) {
+                return true;
+            }
+        },
+        style: function(feature) {
+            return {
+                color: layerInfo[layer].color
+            }
+        },
+        onEachFeature: function (feature, info) { 
+            info.bindPopup('<p>Photo ID: '+feature.properties.PHOTO_ID+'</p>'+'<p>Photo Date: '+feature.properties.Photo_Date+'</p>')
+        }
+    }).addTo(map);
+}
 
-// var sourcesLabels = {
-//     "1920's": geoJsonLayers.twenties,
-//     "1930's": geoJsonLayers.thirties,
-//     "1940's": geoJsonLayers.fourties,
-//     "1950's": geoJsonLayers.fifties,
-//     "1960's": geoJsonLayers.sixties,
-//     "1970's": geoJsonLayers.seventies,
-//     "1980's": geoJsonLayers.eighties,
-//     "1990's": geoJsonLayers.nineties,
-//     "2000's": geoJsonLayers.aughts,
-//     "2010's": geoJsonLayers.ohtens,
-//     "2020's": geoJsonLayers.ohtwenties
-// };
+var sourcesLabels = {
+    "1920's": geoJsonLayers.twenties,
+    "1930's": geoJsonLayers.thirties,
+    "1940's": geoJsonLayers.fourties,
+    "1950's": geoJsonLayers.fifties,
+    "1960's": geoJsonLayers.sixties,
+    "1970's": geoJsonLayers.seventies,
+    "1980's": geoJsonLayers.eighties,
+    "1990's": geoJsonLayers.nineties,
+    "2000's": geoJsonLayers.aughts,
+    "2010's": geoJsonLayers.ohtens,
+    "2020's": geoJsonLayers.ohtwenties
+};
 
 // // add layer control for sorting through the geojson
-// var imageControl = L.control.layers(null,sourcesLabels, {collapsed:false,position:'topright'}).addTo(map);
+var imageControl = L.control.layers(null,sourcesLabels, {collapsed:false,position:'topright'}).addTo(map);
 // // this control needs to:
 // //  - show items from the geojson
 // //  - restrict based on what is visible
@@ -104,44 +104,44 @@ const baseControl = L.control.layers(baseLayers,null,{position:'topleft'}).addTo
 //     return layer.feature.properties.date.slice(0,3);
 // }).addTo(map);
 
-const aerials = $.getJSON('geojson/aerials.json') // attempt to call the geojson into variable via jquery
-L.geoJSON(aerials, {
-    style: function(feature) {
-        return {color: 'yellow'}    // and make it yellow
-    }
-}).addTo(map);
+// const aerials = $.getJSON('geojson/aerials.json') // attempt to call the geojson into variable via jquery
+// L.geoJSON(aerials, {
+//     style: function(feature) {
+//         return {color: 'yellow'}    // and make it yellow
+//     }
+// }).addTo(map);
 
 // add a button to summon photos on a drawn layer or point
-var ourCustomControl = L.Control.extend({
-    options: {
-        position: 'topright'
-    },
-    onAdd: function (map) {
-        var container = L.DomUtil.create('button'); 
+// var ourCustomControl = L.Control.extend({
+//     options: {
+//         position: 'topright'
+//     },
+//     onAdd: function (map) {
+//         var container = L.DomUtil.create('button'); 
 
-        container.innerText = 'Find Aerial Imagery';    // text for button
+//         container.innerText = 'Find Aerial Imagery';    // text for button
         
-        container.style.backgroundColor = 'white';      // styles for the button
-        container.style.borderWidth = '2px';            // these options make it look like
-        container.style.borderColor = '#b4b4b4';        // all of the other buttons that
-        container.style.borderRadius = '5px';           // are already there
-        container.style.borderStyle = 'solid';
-        container.style.width = '140px';
-        container.style.height = '30px';
+//         container.style.backgroundColor = 'white';      // styles for the button
+//         container.style.borderWidth = '2px';            // these options make it look like
+//         container.style.borderColor = '#b4b4b4';        // all of the other buttons that
+//         container.style.borderRadius = '5px';           // are already there
+//         container.style.borderStyle = 'solid';
+//         container.style.width = '140px';
+//         container.style.height = '30px';
         
-        container.onclick = function(){                 // what does the button do?
-            var drawnLayers = map.pm.getGeomanLayers(true);     // gets the drawn layers
-            //console.log('Button has been clicked.');    // writes to the console, to confirm the button works
-            airVectors.eachLayer(function (layer) {
-                if(L.bounds.overlaps(drawnLayers.getBounds())) {    //so, the goal here is to find where the drawn polygon overlaps part of the geojson
-                    console.log('it works')
-                }
-            });
-        }
-        return container;
-    },
-});
-map.addControl(new ourCustomControl());
+//         container.onclick = function(){                 // what does the button do?
+//             var drawnLayers = map.pm.getGeomanLayers(true);     // gets the drawn layers
+//             //console.log('Button has been clicked.');    // writes to the console, to confirm the button works
+//             airVectors.eachLayer(function (layer) {
+//                 if(L.bounds.overlaps(drawnLayers.getBounds())) {    //so, the goal here is to find where the drawn polygon overlaps part of the geojson
+//                     console.log('it works')
+//                 }
+//             });
+//         }
+//         return container;
+//     },
+// });
+// map.addControl(new ourCustomControl());
 
 //add the drawing toolbar
 map.pm.addControls({

@@ -37,9 +37,9 @@ $.getJSON('../geojson/aerials.json', function(data) {
             }
         }
     }).addTo(map);
-    console.log(photoJSON.features[1].properties)
+    console.log(photoJSON.features[1].properties) // for troubleshooting and viewing properties
 
-    photoJSON.features.sort(function(a,b) {
+    photoJSON.features.sort(function(a,b) { // sort the JSON so it shows up nicely
         var propA = a.properties.PHOTO_ID;
         var propB = b.properties.PHOTO_ID;
         return propA - propB;

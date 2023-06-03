@@ -22,59 +22,68 @@
 
 # print(f"GeoJSON file created: {output_geojson}")
 
-import os
-import json
+# import os
+# import json
+# import rasterio
+# from rasterio.transform import Affine
+# from rasterio.warp import transform_bounds
+
+# # Directory containing the COG files
+# directory = "/path/to/cog_directory"
+
+# # Create an empty feature collection
+# feature_collection = {
+#     "type": "FeatureCollection",
+#     "features": []
+# }
+
+# # Iterate through the directory
+# for filename in os.listdir(directory):
+#     if filename.endswith(".tif") or filename.endswith(".tiff"):
+#         cog_path = os.path.join(directory, filename)
+
+#         # Open the COG file and read the metadata
+#         with rasterio.open(cog_path) as dataset:
+#             bounds = dataset.bounds
+#             crs = dataset.crs.to_string()
+
+#         # Transform the bounds to WGS84 (EPSG:4326)
+#         transform = Affine.from_gdal(*dataset.transform)
+#         wgs84_bounds = transform_bounds(transform, *bounds)
+
+#         # Create a feature for the COG file
+#         feature = {
+#             "type": "Feature",
+#             "properties": {
+#                 "filename": filename
+#             },
+#             "geometry": {
+#                 "type": "Polygon",
+#                 "coordinates": [[
+#                     [wgs84_bounds[0], wgs84_bounds[1]],
+#                     [wgs84_bounds[0], wgs84_bounds[3]],
+#                     [wgs84_bounds[2], wgs84_bounds[3]],
+#                     [wgs84_bounds[2], wgs84_bounds[1]],
+#                     [wgs84_bounds[0], wgs84_bounds[1]]
+#                 ]]
+#             }
+#         }
+
+#         # Add the feature to the feature collection
+#         feature_collection["features"].append(feature)
+
+# # Save the GeoJSON file
+# output_file = "/path/to/output.geojson"
+# with open(output_file, "w") as f:
+#     json.dump(feature_collection, f)
+
+# print("GeoJSON file saved successfully.")
+
 import rasterio
-from rasterio.transform import Affine
-from rasterio.warp import transform_bounds
 
-# Directory containing the COG files
-directory = "/path/to/cog_directory"
-
-# Create an empty feature collection
-feature_collection = {
-    "type": "FeatureCollection",
-    "features": []
-}
-
-# Iterate through the directory
-for filename in os.listdir(directory):
-    if filename.endswith(".tif") or filename.endswith(".tiff"):
-        cog_path = os.path.join(directory, filename)
-
-        # Open the COG file and read the metadata
-        with rasterio.open(cog_path) as dataset:
-            bounds = dataset.bounds
-            crs = dataset.crs.to_string()
-
-        # Transform the bounds to WGS84 (EPSG:4326)
-        transform = Affine.from_gdal(*dataset.transform)
-        wgs84_bounds = transform_bounds(transform, *bounds)
-
-        # Create a feature for the COG file
-        feature = {
-            "type": "Feature",
-            "properties": {
-                "filename": filename
-            },
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": [[
-                    [wgs84_bounds[0], wgs84_bounds[1]],
-                    [wgs84_bounds[0], wgs84_bounds[3]],
-                    [wgs84_bounds[2], wgs84_bounds[3]],
-                    [wgs84_bounds[2], wgs84_bounds[1]],
-                    [wgs84_bounds[0], wgs84_bounds[1]]
-                ]]
-            }
-        }
-
-        # Add the feature to the feature collection
-        feature_collection["features"].append(feature)
-
-# Save the GeoJSON file
-output_file = "/path/to/output.geojson"
-with open(output_file, "w") as f:
-    json.dump(feature_collection, f)
-
-print("GeoJSON file saved successfully.")
+try:
+    import rasterio
+    print("rasterio is installed.")
+    print("Version:", rasterio.__version__)
+except ImportError:
+    print("rasterio is not installed.")

@@ -5,10 +5,6 @@
     This file adds a geoJson using JQuery
 */
 
-// enable Turf.js for geospatial analysis later
-const turf = require('@turf/turf');
-const booleanOverlap = require('@turf/boolean-overlap');
-
 // Add map baselayers
 const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -32,15 +28,18 @@ const baseLayers = {
 const baseControl = L.control.layers(baseLayers,null,{position:'topleft'}).addTo(map);
 
 // var showjson = L.FeatureGroup();
-var photoJSON = L.geoJSON(null,{
+let photoJSON = L.geoJSON(null,{
     style: function(feature) {
         return {
             color: 'purple'
         }
     }
 }).addTo(map); // Variable to hold the GeoJSON data
-var sameJson;
-  
+let sameJson;
+
+let outputList = $('#jsonResults'); // HTML ID to put the results into
+outputList.append('<h3>Available Photos</h3>'); // title for the list of results
+
 $.getJSON('../geojson/aerials.json', function(data) {
     photoJSON.addData(data);
     sameJson = data;
@@ -61,18 +60,16 @@ $.getJSON('../geojson/aerials.json', function(data) {
 // .sort() orders by putting the lower number first, so if A - B is negative, A preceeds, if positive, B preceeds, if 0 they are equal
     });
 
-    var outputList = $('#jsonResults'); // HTML ID to put the results into
-    outputList.append('<h3>Available Photos</h3>'); // title for the list of results
-    
-    sameJson.features.forEach(function(feature) {
-        var properties = feature.properties;
-        outputList.append('<input type="checkbox">')
-        outputList.append('<label> ' + properties.PHOTO_ID + '</label></br>');
-    });
+    // sameJson.features.forEach(function(feature) {
+    //     var properties = feature.properties;
+    //     outputList.append('<input type="checkbox">')
+    //     outputList.append('<label> ' + properties.PHOTO_ID + '</label></br>');
+    // });
 });
 baseControl.addOverlay(photoJSON,"Aerial Image Locations");
 
 var userIn = new L.FeatureGroup().addTo(map);  // variable to store user drawn inputs
+
 
 // add drawing control bar
 var drawControl = new L.Control.Draw({
@@ -90,16 +87,63 @@ var drawControl = new L.Control.Draw({
 });
 map.addControl(drawControl);
 
+let userShape = null;
 // save user drawn items as new layers in the layer group
 map.on('draw:created', function(e) {
     var layer = e.layer;
     userIn.addLayer(layer);
+
+    //save the polygon to GeoJSON for later analysis
+    userShape = layer.toGeoJSON();
+    console.log('User Input: ',userShape);
 });
 
-// check the user-polygon for image overlap
-function checkForPhotos() {
-    if (userIn === null) {
-        console.log('Draw a thing.');
-    }
-    // you left off here. Getting into Turf.js - see if you can get a build that just includes booleanOverlap 
-}
+// add a button to summon photos on a drawn layer or point
+var ourCustomControl = L.Control.extend({
+    options: {
+        position: 'topright'
+    },
+    onAdd: function (map) {
+        var container = L.DomUtil.create('button'); 
+
+        container.innerText = 'Find Aerial Imagery';    // text for button
+        
+        container.style.backgroundColor = 'white';      // styles for the button
+        container.style.borderWidth = '2px';            // these options make it look like
+        container.style.borderColor = '#b4b4b4';        // all of the other buttons that
+        container.style.borderRadius = '5px';           // are already there
+        container.style.borderStyle = 'solid';
+        container.style.width = '140px';
+        container.style.height = '30px';
+        
+//Set the function of the button to check if the user input overlaps the aerials
+        container.onclick = function(){             // when we click the button
+            console.log('Pull the lever, Cronk.');   // display a message confirming the click
+            if (userShape === null) {                  // if the user has not set an input
+                console.log('Wrong levaaaaAAAAAAHHHHH!!!!!!');       // return an error message
+                return;
+            }
+            console.log('Test sameJson:',sameJson);
+            console.log('Test userShape:',userShape);
+            //iterate through the json and check if the polygons overlap the user input
+            sameJson.features.forEach(function(feature) {
+                var properties = feature.properties;
+                console.log('does it show the feature?',feature)
+                var overlap = turf.booleanContains(properties, userShape);  // check user poly against air json for overlap
+                
+                if (overlap) {
+                    console.log('Overlap has happened. Now what?');
+                    outputList.append('<input type="checkbox">')
+                    outputList.append('<label> ' + properties.PHOTO_ID + '</label></br>');
+                }
+                else {
+                    console.log('No overlap. You need a pop-up alert.');
+                }
+                
+            });
+        }
+        return container;
+    },
+});
+map.addControl(new ourCustomControl());
+

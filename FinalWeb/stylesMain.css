@@ -94,6 +94,9 @@ p {
 #logo {
     height: 7.5vh;
 }
+#tagline {
+    font-style: italic;
+}
 #map {height: 600px; }
 #S {
     color:#1B8F3D;

@@ -24,6 +24,8 @@
     <!-- Leaflet Draw -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-draw/dist/leaflet.draw.css" />
     <script src="https://unpkg.com/leaflet-draw/dist/leaflet.draw.js"></script>
+    <!-- turf.js - for reading in user input -->
+    <script src='javascript\turf.min.js'></script>
     <!-- Our site's CSS -->
     <link rel="stylesheet" href="stylesMain.css"/>
 </head>
@@ -38,6 +40,16 @@
     <!-- <script src="javascript/svAddJson.js"></script> -->
     <!-- <script src="javascript/svSortJson.js"></script> -->
     <!-- <script src="javascript/svDraw.js"></script> -->
-    <script src="javascript/svSelect.js"></script>
+<!-- <script src="javascript/svTurfTest.js"></script> -->
+    <!-- <script src="javascript/svSelect.js"></script> -->
+
+    <script>
+        // var bbox = turf.bbox(features);
+        const polygon1 = turf.polygon([[[0, 0], [0, 10], [10, 10], [10, 0], [0, 0]]]);
+        const polygon2 = turf.polygon([[[5, 5], [5, 15], [15, 15], [15, 5], [5, 5]]]);
+
+        const overlap = turf.booleanOverlap(polygon1, polygon2);
+        console.log('Do the polygons overlap?', overlap);
+    </script>
 </body>
 </html>

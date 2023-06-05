@@ -97,6 +97,9 @@ p {
 #tagline {
     font-style: italic;
 }
+#cambiumLogo {
+    float: left;
+}
 #map {height: 600px; }
 #S {
     color:#1B8F3D;

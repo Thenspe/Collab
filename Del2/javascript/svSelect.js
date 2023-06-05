@@ -43,14 +43,6 @@ outputList.append('<h3>Available Photos</h3>'); // title for the list of results
 $.getJSON('../geojson/aerials.json', function(data) {
     photoJSON.addData(data);
     sameJson = data;
-    // photoJSON = data; // Assign the loaded GeoJSON data to the variable
-    // L.geoJSON(photoJSON,{   //leaflet call for the geojson
-    //     style: function(feature) {
-    //         return {
-    //             color: 'yellow' // make the polygons yellow
-    //         }
-    //     }
-    // }).addTo(map);
     console.log(sameJson.features[1].properties) // for troubleshooting and viewing properties
 
     sameJson.features.sort(function(a,b) { // sort the JSON so it shows up nicely
@@ -60,11 +52,6 @@ $.getJSON('../geojson/aerials.json', function(data) {
 // .sort() orders by putting the lower number first, so if A - B is negative, A preceeds, if positive, B preceeds, if 0 they are equal
     });
 
-    // sameJson.features.forEach(function(feature) {
-    //     var properties = feature.properties;
-    //     outputList.append('<input type="checkbox">')
-    //     outputList.append('<label> ' + properties.PHOTO_ID + '</label></br>');
-    // });
 });
 baseControl.addOverlay(photoJSON,"Aerial Image Locations");
 
@@ -130,19 +117,31 @@ var ourCustomControl = L.Control.extend({
             sameJson.features.forEach(function(feature) {
                 var properties = feature.properties;
                 var geometry = feature.geometry;
-                console.log('How many features does it show?',count+=1);
-                console.log(feature.properties.PHOTO_ID);
-                
-                var overlap = turf.booleanContains(geometry, userShape);  // check user poly against air json for overlap
-                
-                if (overlap == null) {
-                    console.log("I'll be surprised if this works");
+                var item = feature.properties.PHOTO_ID
+                count +=1;
+
+                // check for null values, skip if present
+                if(!geometry || !userShape) {
+                    console.log('Invalid geometry or userShape on Photo',item);
+                    return; // skip if either item is null
+                }
+                // check that geojson items are polygons
+                if(feature.geometry.type !== 'Polygon') {
+                    console.log('Not a polygon: Photo',item)
                     return;
-                } else if (overlap) {
+                }
+
+                console.log('How many features does it show?',count);
+                console.log('Photo ID:',feature.properties.PHOTO_ID);
+                
+                var overlap = turf.booleanContains(userShape,geometry);  // check user poly against air json for overlap
+                
+                if (overlap) {
                     console.log('Overlap has happened. Now what?');
                     outputList.append('<input type="checkbox">')
                     outputList.append('<label> ' + properties.PHOTO_ID + '</label></br>');
-                } else {
+                }
+                else {
                     console.log('No overlap. You need a pop-up alert.');
                 }
                 
@@ -152,4 +151,3 @@ var ourCustomControl = L.Control.extend({
     },
 });
 map.addControl(new ourCustomControl());
-

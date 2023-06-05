@@ -87,6 +87,9 @@ h2 {
     color: #00A2E8;
     margin: 2vh;
 }
+p {
+    margin-bottom: 10px;
+}
 
 #logo {
     height: 7.5vh;

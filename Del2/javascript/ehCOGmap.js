@@ -8,7 +8,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // Load the GeoTIFF file
-var url = 'Del2\imagery\TrentUniFreeTIFs\A02033-009_cog.tif';
+var url = 'imagery\TrentUniFreeTIFs\A02033-009_cog.tif';
 fetch(url)
     .then(function(response) {
         return response.arrayBuffer();

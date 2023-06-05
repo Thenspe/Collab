@@ -24,32 +24,45 @@ const baseLayers = {
     'Esri World Imagery': Esri_WorldImagery,
     'OpenStreetMap': osm
 };
-const baseControl = L.control.layers(baseLayers,null,{position:'topleft'}).addTo(map);
+const baseControl = L.control.layers(baseLayers,null,{collapsed:false,position:'topleft'}).addTo(map);
 
-var photoJSON; // Variable to hold the GeoJSON data
+// var showjson = L.FeatureGroup();
+var photoJSON = L.geoJSON(null,{
+    style: function(feature) {
+        return {
+            color: 'purple'
+        }
+    }
+}).addTo(map); // Variable to hold the GeoJSON data
+var sameJson;
   
 $.getJSON('../geojson/aerials.json', function(data) {
-    photoJSON = data; // Assign the loaded GeoJSON data to the variable
-    L.geoJSON(photoJSON,{
-        style: function(feature) {
-            return {
-                color: 'yellow'
-            }
-        }
-    }).addTo(map);
-    console.log(photoJSON.features[1].properties) // for troubleshooting and viewing properties
+    photoJSON.addData(data);
+    sameJson = data;
+    // photoJSON = data; // Assign the loaded GeoJSON data to the variable
+    // L.geoJSON(photoJSON,{   //leaflet call for the geojson
+    //     style: function(feature) {
+    //         return {
+    //             color: 'yellow' // make the polygons yellow
+    //         }
+    //     }
+    // }).addTo(map);
+    console.log(sameJson.features[1].properties) // for troubleshooting and viewing properties
 
-    photoJSON.features.sort(function(a,b) { // sort the JSON so it shows up nicely
+    sameJson.features.sort(function(a,b) { // sort the JSON so it shows up nicely
         var propA = a.properties.PHOTO_ID;
         var propB = b.properties.PHOTO_ID;
         return propA - propB;
+// .sort() orders by putting the lower number first, so if A - B is negative, A preceeds, if positive, B preceeds, if 0 they are equal
     });
 
-    var outputList = $('#jsonResults');
-    outputList.append('<h3>Available Photos</h3>');
+    var outputList = $('#jsonResults'); // HTML ID to put the results into
+    outputList.append('<h3>Available Photos</h3>'); // title for the list of results
     
-    photoJSON.features.forEach(function(feature) {
+    sameJson.features.forEach(function(feature) {
         var properties = feature.properties;
-        outputList.append('<p>' + properties.PHOTO_ID + '</p>');
+        outputList.append('<input type="checkbox">')
+        outputList.append('<label> ' + properties.PHOTO_ID + '</label></br>');
     });
 });
+baseControl.addOverlay(photoJSON,"Aerial Image Locations");

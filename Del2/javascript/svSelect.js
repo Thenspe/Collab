@@ -38,7 +38,6 @@ let photoJSON = L.geoJSON(null,{
 let sameJson;
 
 let outputList = $('#jsonResults'); // HTML ID to put the results into
-outputList.append('<h3>Available Photos</h3>'); // title for the list of results
 
 $.getJSON('../geojson/aerials.json', function(data) {
     photoJSON.addData(data);
@@ -66,7 +65,7 @@ var drawControl = new L.Control.Draw({
         rectangle: false,
         circle: false,
         circlemarker: false,
-        marker: true,
+        marker: false,
     },
     edit: {
         featureGroup: userIn
@@ -106,6 +105,9 @@ var ourCustomControl = L.Control.extend({
 //Set the function of the button to check if the user input overlaps the aerials
         container.onclick = function(){             // when we click the button
             console.log('Pull the lever, Cronk.');   // display a message confirming the click
+            outputList.empty();
+            outputList.append('<h3>Available Photos</h3>'); // title for the list of results
+
             if (userShape === null) {                  // if the user has not set an input
                 console.log('Wrong levaaaaAAAAAAHHHHH!!!!!!');       // return an error message
                 return;
@@ -113,6 +115,7 @@ var ourCustomControl = L.Control.extend({
             console.log('Test sameJson:',sameJson);
             console.log('Test userShape:',userShape);
             count = 0;
+            numResults = 0;
             //iterate through the json and check if the polygons overlap the user input
             sameJson.features.forEach(function(feature) {
                 var properties = feature.properties;
@@ -122,30 +125,34 @@ var ourCustomControl = L.Control.extend({
 
                 // check for null values, skip if present
                 if(!geometry || !userShape) {
-                    console.log('Invalid geometry or userShape on Photo',item);
+                    console.log('ERROR: Invalid geometry or userShape on Photo',item);
                     return; // skip if either item is null
                 }
                 // check that geojson items are polygons
                 if(feature.geometry.type !== 'Polygon') {
-                    console.log('Not a polygon: Photo',item)
+                    console.log('ERROR: Not a polygon: Photo',item);
                     return;
                 }
 
-                console.log('How many features does it show?',count);
+                // console.log('How many features does it show?',count);
                 console.log('Photo ID:',feature.properties.PHOTO_ID);
                 
-                var overlap = turf.booleanContains(userShape,geometry);  // check user poly against air json for overlap
+                var overlap = turf.booleanContains(geometry,userShape) || turf.booleanContains(userShape,geometry);  // check user poly against air json for overlap
                 
                 if (overlap) {
-                    console.log('Overlap has happened. Now what?');
                     outputList.append('<input type="checkbox">')
                     outputList.append('<label> ' + properties.PHOTO_ID + '</label></br>');
+                    numResults += 1;
                 }
                 else {
-                    console.log('No overlap. You need a pop-up alert.');
+                    console.log('No overlap.');
                 }
                 
             });
+            if (numResults === 0) {
+                outputList.append('There are no photos in this area.');
+            }
+            console.log('numResults',numResults);
         }
         return container;
     },

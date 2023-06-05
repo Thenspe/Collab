@@ -125,18 +125,24 @@ var ourCustomControl = L.Control.extend({
             }
             console.log('Test sameJson:',sameJson);
             console.log('Test userShape:',userShape);
+            count = 0;
             //iterate through the json and check if the polygons overlap the user input
             sameJson.features.forEach(function(feature) {
                 var properties = feature.properties;
-                console.log('does it show the feature?',feature)
-                var overlap = turf.booleanContains(properties, userShape);  // check user poly against air json for overlap
+                var geometry = feature.geometry;
+                console.log('How many features does it show?',count+=1);
+                console.log(feature.properties.PHOTO_ID);
                 
-                if (overlap) {
+                var overlap = turf.booleanContains(geometry, userShape);  // check user poly against air json for overlap
+                
+                if (overlap == null) {
+                    console.log("I'll be surprised if this works");
+                    return;
+                } else if (overlap) {
                     console.log('Overlap has happened. Now what?');
                     outputList.append('<input type="checkbox">')
                     outputList.append('<label> ' + properties.PHOTO_ID + '</label></br>');
-                }
-                else {
+                } else {
                     console.log('No overlap. You need a pop-up alert.');
                 }
                 

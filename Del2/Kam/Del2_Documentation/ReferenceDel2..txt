@@ -1,0 +1,28 @@
+Collab Project P2306: Deliverable 2 Air Photo Map Links.
+
+//Leaflet documentation.
+Source code: https://leafletjs.com/examples/geojson/ 
+
+Functions and methods: https://leafletjs.com/reference.html#geojson
+
+// Display a geojson polygon on a leaflet with pop up.
+https://www.youtube.com/watch?v=21Z0NW5euAM&list=PLw9KKe63Tl3Z1q4pfsXDC7zhk5X_D3qXM&index=2
+
+	Source code: https://github.com/Gauravparajuli09/leaflet/blob/main/index.html
+	
+
+// Geo-raster-layer-for-leaflet, leaflet plugin.
+Documentation and Source code: https://github.com/GeoTIFF/georaster-layer-for-leaflet/tree/master
+
+	// Load cog via script tag source code: 
+		https://github.com/GeoTIFF/georaster-layer-for-leaflet-example/blob/master/examples/load-cog-via-script-tag.html
+		
+	// Examples with links and live demos
+		Example Source code: https://github.com/GeoTIFF/georaster-layer-for-leaflet-example
+		
+		Live demo: https://geotiff.github.io/georaster-layer-for-leaflet-example/examples/load-cog-via-script-tag.html
+			* View inspect page for code construction
+			
+// Fix invalid lat lng error - GIS Stack Exchange.
+* Note: need to covnert cog imagery to Web mercator
+GIS Stack Exchange help: https://gis.stackexchange.com/questions/423302/using-leaflet-js-trying-to-use-l-vectorgrid-protobuf-to-display-vector-tiles-on

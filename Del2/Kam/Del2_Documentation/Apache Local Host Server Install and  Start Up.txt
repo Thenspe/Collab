@@ -1,0 +1,76 @@
+Apache Local Host Server Install and  Start Up
+
+Install
+1. Naviagte to https://httpd.apache.org/, and under 'Apache httpd ' Latest Version Number'
+Released (Latest Version number refers to the newest release of apache server. This should
+be the second header on the page), click download
+
+2. Under the first header ' Downloading the Apache HTTP Server, read through the documentation
+until you read ' Apache httpd for Microsoft Windows is available from a number of 
+third party vendors.
+
+Clcik on 'third partie vendors'.
+
+*Note. Apache server can be installed source code, however, we will use a third party
+vendor which has packaged the necessary files for us in binary release so we do not need to
+compile the server ourselves.
+
+3. Once you have read through and clicked on the third party vendors, in the first header
+'Downloading Apache for Windows', located the list of popular third party vendors for
+deploying the apache server. 
+
+Click on 'Apache Lounge'
+
+4. Under Apache (Release Version) Binaries, click the zip file for the 32 or 64 bit
+version depending on your computer specs, and begin the download.
+
+5. Once the zip file ahs downlaoded, unzip the folder, and choose a desired location
+(default 'downloads' folder is fine).
+
+6. Double click the unzipped folder to see its contents. You should see two files and a 
+folder called 'Apache 24'.
+
+7. Right click the 'Apache24' folder and copy it to your 'C' drive. Double click the folder
+to see its contents, and navigate to the htdocs folder, double click it. This is where we will
+execute the server.
+
+You are now ready to start up the server.
+
+
+Start Up
+1. Open command prompt by typing 'cmd' into the windows search bar.
+
+2. Right click the application and choose 'run as administrator'. It will ask if this
+application can make changes to your computer, click yes to continue.
+
+3. Enter the following directy into command line:
+	cd C:\Apache24\bin 
+						*This this the directory where the '.exe' is located.
+						*Note: if you installed Apache on your computer in a different
+						location on your computer, edit the directory. C drive is default.
+
+4. After completing step 3, the following should appear on the next command line:
+	C:\Apache24\bin>
+	
+	Once you see the above, the type the following in the command line:
+		httpd.exe
+		
+	The server should now be running. To double check, navigate to your browser, and enter
+	the following:
+	
+	127.0.0.1
+		This is the home page of your website, you should see "This works" at the top. 
+		If not, restart the process and try again.
+	
+	Optionally, you can right click the index.html page that was created in your
+	C:\Apache\htdocs folder directy on your computer.
+		
+*Note: Any html files that are created within the 'C:\Apache\htdocs folder directory
+can be accessed in the browser by inserting '127.0.0.1' prior.
+	Ex: If your home page was home.html:
+		127.0.0.1/home.html
+		
+Note* If the created 'index.html' page that was originally is altered, then open using 
+method above, using the right click option will open the page via a file path from your
+computer and may give erros to access information on your webpage.
+

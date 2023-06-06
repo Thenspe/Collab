@@ -1,3 +1,0 @@
-var APpoly2 = [{"type":"FeatureCollection", "features": [
-    {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-78.90980758162608,43.83191415528002],[-78.85341810240615,43.842741654368915],[-78.86857637967331,43.884129256897374],[-78.9252827859343,43.87324082385762],[-78.90980758162608,43.83191415528002]]]},"properties":{"PHOTO_ID":1251,"date":"1973-06-11T00:00:00.000Z","scale":20000,"Date_1":"1973","Proj_Num":"15886-001","Location":"Whitby","Roll_No":"A23294","Photo_No":"81","Scale":"20,000","Latitude":"","Longitude":"","Proj_No":"15886-001","Photo_Date":"1973-06-11","County":"Whitby","Obtained_from_Where":"NAPL","mxd":null,"Photo_Year":"1973-06-11"}}]}
-];

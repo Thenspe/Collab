@@ -14,3 +14,56 @@
     <script src="https://thenspe.github.io/P2306/Del2/javascript/ehCOGmap.js"></script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Render GeoTIFF on Leaflet Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/geotiff/dist/geotiff.bundle.min.js"></script>
+  <style>
+    #map {
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script>
+    var map = L.map('map').setView([0, 0], 2);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var imageUrl = 'path/to/your/geotiff.tif';
+
+    fetch(imageUrl)
+      .then(function(response) {
+        return response.arrayBuffer();
+      })
+      .then(function(arrayBuffer) {
+        var tiff = GeoTIFF.fromArrayBuffer(arrayBuffer);
+        var image = tiff.getImage();
+        var rgba = image.readRasters();
+
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = image.getWidth();
+        canvas.height = image.getHeight();
+
+        var imageData = ctx.createImageData(canvas.width, canvas.height);
+        imageData.data.set(rgba);
+        ctx.putImageData(imageData, 0, 0);
+
+        var bounds = L.latLngBounds([[image.getBoundingBox()[1], image.getBoundingBox()[0]], [image.getBoundingBox()[3], image.getBoundingBox()[2]]]);
+        L.imageOverlay(canvas.toDataURL(), bounds).addTo(map);
+      })
+      .catch(function(error) {
+        console.log('Error loading GeoTIFF:', error);
+      });
+  </script>
+</body>
+</html>

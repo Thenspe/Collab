@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@turf/boolean-overlap": "^6.5.0",
+    "geotiff.js": "^1.0.1",
     "turf": "^3.0.14"
   }
 }

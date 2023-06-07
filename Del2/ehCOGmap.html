@@ -1,27 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title>Leaflet GeoTIFF Example</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-</head>
-<body>
-    <div id="map" style="height: 400px;"></div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/geotiff/1.0.0-rc.6/geotiff.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geotiff/1.0.0/leaflet-geotiff.min.js"></script>
-    <script src="https://thenspe.github.io/P2306/Del2/javascript/ehCOGmap.js"></script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html>
-<head>
   <title>Render GeoTIFF on Leaflet Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/geotiff/dist/geotiff.bundle.min.js"></script>
+  <script src="javascript/geotiff.bundle.min.js"></script>
   <style>
     #map {
       height: 400px;
@@ -38,25 +21,39 @@
       attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    var imageUrl = 'path/to/your/geotiff.tif';
+    var imageUrl = '../imagery/TrentUniFreeTIFs/A02033-009_cog.tif';
 
     fetch(imageUrl)
       .then(function(response) {
         return response.arrayBuffer();
       })
       .then(function(arrayBuffer) {
-        var tiff = GeoTIFF.fromArrayBuffer(arrayBuffer);
+        var tiff = GeoTIFF.parse(arrayBuffer);
         var image = tiff.getImage();
-        var rgba = image.readRasters();
+        var width = image.getWidth();
+        var height = image.getHeight();
+        var rasters = image.readRasters();
+
+ 
 
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
-        canvas.width = image.getWidth();
-        canvas.height = image.getHeight();
+        canvas.width = width;
+        canvas.height = height;
 
-        var imageData = ctx.createImageData(canvas.width, canvas.height);
-        imageData.data.set(rgba);
+ 
+
+        var imageData = ctx.createImageData(width, height);
+        var data = imageData.data;
+        for (var i = 0; i < width * height; i++) {
+          data[i * 4] = rasters[0][i];     // Red channel
+          data[i * 4 + 1] = rasters[1][i]; // Green channel
+          data[i * 4 + 2] = rasters[2][i]; // Blue channel
+          data[i * 4 + 3] = 255;           // Alpha channel
+        }
         ctx.putImageData(imageData, 0, 0);
+
+ 
 
         var bounds = L.latLngBounds([[image.getBoundingBox()[1], image.getBoundingBox()[0]], [image.getBoundingBox()[3], image.getBoundingBox()[2]]]);
         L.imageOverlay(canvas.toDataURL(), bounds).addTo(map);
@@ -64,6 +61,6 @@
       .catch(function(error) {
         console.log('Error loading GeoTIFF:', error);
       });
-  </script>
+    </script>
 </body>
 </html>

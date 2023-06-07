@@ -4,7 +4,7 @@
   <title>Render GeoTIFF on Leaflet Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="javascript/geotiff.bundle.min.js"></script>
+  <script src="https://unpkg.com/geotiff.js@1.0.6/dist/geotiff.js"></script>
   <style>
     #map {
       height: 400px;
@@ -34,14 +34,10 @@
         var height = image.getHeight();
         var rasters = image.readRasters();
 
- 
-
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
         canvas.width = width;
         canvas.height = height;
-
- 
 
         var imageData = ctx.createImageData(width, height);
         var data = imageData.data;
@@ -53,14 +49,12 @@
         }
         ctx.putImageData(imageData, 0, 0);
 
- 
-
         var bounds = L.latLngBounds([[image.getBoundingBox()[1], image.getBoundingBox()[0]], [image.getBoundingBox()[3], image.getBoundingBox()[2]]]);
         L.imageOverlay(canvas.toDataURL(), bounds).addTo(map);
       })
       .catch(function(error) {
         console.log('Error loading GeoTIFF:', error);
       });
-    </script>
+  </script>
 </body>
 </html>

@@ -1,60 +1,57 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Render GeoTIFF on Leaflet Map</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/geotiff.js@1.0.6/dist/geotiff.js"></script>
-  <style>
-    #map {
-      height: 400px;
-    }
-  </style>
-</head>
-<body>
-  <div id="map"></div>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
+    <style>
+      #map {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/proj4"></script>
+    <script src="https://unpkg.com/georaster"></script>
+    <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+    <script>
+      // initalize leaflet map
+      var map = L.map('map').setView([0, 0], 5);
 
-  <script>
-    var map = L.map('map').setView([0, 0], 2);
+      // add OpenStreetMap basemap
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-    }).addTo(map);
+      var url_to_geotiff_file = "Del2\TrentUniFreeCOGs\A02033-009_cog.tif";
 
-    var imageUrl = '../imagery/TrentUniFreeTIFs/A02033-009_cog.tif';
+      parseGeoraster(url_to_geotiff_file).then(georaster => {
+        console.log("georaster:", georaster);
 
-    fetch(imageUrl)
-      .then(function(response) {
-        return response.arrayBuffer();
-      })
-      .then(function(arrayBuffer) {
-        var tiff = GeoTIFF.parse(arrayBuffer);
-        var image = tiff.getImage();
-        var width = image.getWidth();
-        var height = image.getHeight();
-        var rasters = image.readRasters();
+        /*
+            GeoRasterLayer is an extension of GridLayer,
+            which means can use GridLayer options like opacity.
 
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-        canvas.width = width;
-        canvas.height = height;
+            Just make sure to include the georaster option!
 
-        var imageData = ctx.createImageData(width, height);
-        var data = imageData.data;
-        for (var i = 0; i < width * height; i++) {
-          data[i * 4] = rasters[0][i];     // Red channel
-          data[i * 4 + 1] = rasters[1][i]; // Green channel
-          data[i * 4 + 2] = rasters[2][i]; // Blue channel
-          data[i * 4 + 3] = 255;           // Alpha channel
-        }
-        ctx.putImageData(imageData, 0, 0);
+            http://leafletjs.com/reference-1.2.0.html#gridlayer
+        */
+        var layer = new GeoRasterLayer({
+            attribution: "Planet",
+            georaster: georaster,
+            resolution: 128
+        });
+        layer.addTo(map);
 
-        var bounds = L.latLngBounds([[image.getBoundingBox()[1], image.getBoundingBox()[0]], [image.getBoundingBox()[3], image.getBoundingBox()[2]]]);
-        L.imageOverlay(canvas.toDataURL(), bounds).addTo(map);
-      })
-      .catch(function(error) {
-        console.log('Error loading GeoTIFF:', error);
-      });
-  </script>
-</body>
+        map.fitBounds(layer.getBounds());
+
+    });
+
+    </script>
+  </body>
 </html>

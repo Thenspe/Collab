@@ -1,8 +1,12 @@
 import arcpy
 
+workspace="D:\\FlemSem3\\Collab\\CollabProj\\CollabProj.gdb"    # do not include these three lines if you bring it into Pro
+arcpy.env.workspace = workspace
+arcpy.env.overwriteOutput = True
+
 def script_tool(param0,param1,param2,param3,param4):   # master function
   buff = arcpy.analysis.Buffer(param0,param1,param2)
-  arcpy.analysis.Intersect([buff,param3],param4)
+  arcpy.analysis.Intersect([param1,param3],param4)
   return
 
 if __name__ == "__main__":

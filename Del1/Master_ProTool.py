@@ -9,8 +9,10 @@ On final output, all units are in meters unless otherwise specified.
 
 import arcpy
 import re
+import os
+from datetime import date
 
-def script_tool(param0):   # master function
+def script_tool(param0,param1,param2):   # master function
 
     dataTable = param0 # 'Wells_In_Buffer'
     tables = ['Wells_Type','Borehole_Results','Borehole_Details']
@@ -32,6 +34,14 @@ def script_tool(param0):   # master function
         ]
     stratigraphy = 'GEO'
     MOE_Holes = ['HOLE','CAS','SCRN']
+    
+    outTables = []
+    today = str(date.today())
+        # set output table file path and name;
+    for x in range(len(tables)):
+        csvTable = os.path.join(param1,today + ' - ' +param2 + ' - ' + tables[x] + '.csv')
+        outTables.append(csvTable)
+        print(outTables[x])
 
     def addSomeFields(table,field,alias):
     # Step 2 - This function iterates through adding fields to some tables
@@ -244,10 +254,22 @@ def primary(waterField):            # function required for ArcGIS Pro code bloc
             cursor.updateRow(row)
 
     print('Step 4: Unit Conversions - COMPLETE.')
+
+    ####################################################################################
+    # Step 5 - .csv outputs
+    
+    for t in range(len(tables)):
+        arcpy.conversion.ExportTable(tables[t],outTables[t],sort_field=tableFields[t][0],use_field_alias_as_name=True)
+        print("Table",t,"export complete.")
+    print('Step 5: Table Exports - COMPLETE.')
+    
     return
+
 
 if __name__ == "__main__":
 
     param0 = arcpy.GetParameter(0) # Wells_In_Buffer
+    param1 = arcpy.GetParameterAsText(1) # folder path
+    param2 = arcpy.GetParameter(2) # project number
 
-    script_tool(param0)
+    script_tool(param0,param1,param2)

@@ -7,8 +7,14 @@ intersect to reduce the number of wells, and outputs 3 tables, populated and wit
 
 import arcpy
 import re
+import os
+from datetime import date
 
-def script_tool(param0):   # master function
+workspace="D:\\FlemSem3\\Collab\\CollabProj\\CollabProj.gdb"    # do not include these three lines if you bring it into Pro
+arcpy.env.workspace = workspace
+arcpy.env.overwriteOutput = True
+
+def script_tool(param0,param1,param2):   # master function
 
     dataTable = param0 # 'Wells_In_Buffer'
     tables = ['Wells_Type','Borehole_Results','Borehole_Details']
@@ -30,6 +36,14 @@ def script_tool(param0):   # master function
         ]
     stratigraphy = 'GEO'
     MOE_Holes = ['HOLE','CAS','SCRN']
+    outTables = []
+    today = str(date.today())
+    
+    # set output table file path and name;
+    for x in range(len(tables)):
+        csvTable = os.path.join(param1,today + ' - ' +param2 + ' - ' + tables[x] + '.csv')
+        outTables.append(csvTable)
+        print(outTables[x])
 
     def addSomeFields(table,field,alias):
     # Step 2 - This function iterates through adding fields to some tables
@@ -128,9 +142,9 @@ def script_tool(param0):   # master function
     # create the search cursor, for pulling data from the original table
     pull = arcpy.da.SearchCursor(dataTable, searchFields)
     for row in pull:                # for each row in the original table...
-        # print(pull)
+        # print("pull:",pull)
         pipes = pull[1].split("|")  # separate by the pipes.
-        # print(pipes)
+        # print("pipes:",pipes)
         for x in pipes:             # for each set of pipes...
             semicolons = x.split(";")   # separate by the semicolons.
             # print(pull[0])
@@ -242,12 +256,23 @@ def primary(waterField):            # function required for ArcGIS Pro code bloc
             cursor.updateRow(row)
 
     print('Step 4: Unit Conversions - COMPLETE.')
+
+    ####################################################################################
+    # Step 5 - .csv outputs
+    
+    for t in range(len(tables)):
+        arcpy.conversion.ExportTable(tables[t],outTables[t],sort_field=tableFields[t][0],use_field_alias_as_name=True)
+        print("Table",t,"export complete.")
+    print('Step 5: Table Exports - COMPLETE.')
+    
     return
 
 if __name__ == "__main__":
 
     # param0 = arcpy.GetParameter(0) # Wells_In_Buffer
-    param0 = 'CambiumPeterboroug_Intersect'
-    # param0 = 'Fleming_Intersect'
+    # param0 = 'CambiumPeterboroug_Intersect'
+    param0 = 'Fleming_Intersect'
+    param1 = 'D:/FlemSem3/Collab/P2306/Del1/Outputs' # output folder
+    param2 = '1234' # project number
 
-    script_tool(param0)
+    script_tool(param0,param1,param2)
